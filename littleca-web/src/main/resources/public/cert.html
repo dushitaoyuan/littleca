@@ -1,0 +1,198 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>rsax509证书生成</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../layui/css/layui.css" rel="stylesheet" type="text/css" media="all" />
+<script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+<link href="../css/cert.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<iframe src="../header.html" height="230px" width="1200px" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" ></iframe>
+<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px; color: #01AAED;">
+			<legend>证书生成(推荐字符全部大写)</legend>
+</fieldset>
+ <div class="top">
+ <div class="layui-form" lay-filter="cert-form">
+  <div class="layui-form-item">
+   <div class="layui-inline">
+   <label class="layui-form-label">国家代码</label>
+    <div class="layui-input-inline">
+      <input type="text" value="CN" name="C"  lay-verify="required"  autocomplete="off" placeholder="请输入国家代码" class="layui-input"">
+    </div>
+    </div>
+     <div class="layui-inline">
+      <label class="layui-form-label">省份/州</label>
+    <div class="layui-input-inline">
+      <input type="text" name="ST" lay-verify="required" placeholder="请输入省份/州代码" autocomplete="off" class="layui-input">
+    </div>
+    </div>
+     <div class="layui-inline">
+      <label class="layui-form-label">城市</label>
+      <div class="layui-input-inline">
+        <input type="text" name="L" lay-verify="required" placeholder="请输入城市代码" autocomplete="off" class="layui-input">
+    </div>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-inline">
+      <label class="layui-form-label">邮箱</label>
+      <div class="layui-input-inline">
+        <input type="text" name="E" lay-verify="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">组织代码</label>
+      <div class="layui-input-inline">
+        <input type="text" name="O" lay-verify="required" placeholder="请输入组织代码" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+        <div class="layui-inline">
+      <label class="layui-form-label">单位</label>
+      <div class="layui-input-inline">
+        <input type="text" name="OU" placeholder="请输入单位代码"  lay-verify="required"  autocomplete="off" class="layui-input">
+      </div>
+    </div>
+  </div>
+  
+  <div class="layui-form-item">
+      <div class="layui-inline">
+      <label class="layui-form-label">用户名/域名</label>
+      <div class="layui-input-inline">
+        <input type="text" name="CN" lay-verify="required" placeholder="请输入用户名/域名" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-inline">
+      <label class="layui-form-label">生效日期</label>
+      <div class="layui-input-inline">
+        <input type="text" name="notBefore" id="startDate" lay-verify="date" placeholder="请输入证书生效日期" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+      <div class="layui-inline">
+      <label class="layui-form-label">截止日期</label>
+      <div class="layui-input-inline">
+        <input type="text" name="notAfter" id="endDate" lay-verify="date" placeholder="请输入证书截止日期" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+ 
+  </div>
+ <div id="dy-content">
+    <div class="layui-form-item">
+   	<label class="layui-form-label">密钥位数</label>
+	<div class="layui-input-block">
+		<input type="radio" name="keySize" value="1024" title="1024" checked="checked">
+		<input type="radio" name="keySize" value="2048" title="2048">
+	</div>
+	</div>
+   <div class="layui-form-item" style="width: 950px;">
+    <label class="layui-form-label">签名算法</label>
+    <div class="layui-input-block">
+      <select name="signAlg" lay-filter="signAlg" >
+       <option value="SHA256WITHRSA" selected="">SHA256WITHRSA</option>
+        <option value="MD5WITHRSA" >MD5WITHRSA</option>
+        <option value="SHA1WITHRSA" >SHA1WITHRSA</option>
+      </select>
+    </div>
+  </div>
+  
+ </div>
+     <div class="layui-form-item op-div">
+      <button class="layui-btn" lay-submit lay-filter="cert-create" >证书生成</button>
+      <button type="reset" class="layui-btn layui-btn-primary">清空</button>
+      <button type="button" class="layui-btn" id="down-p12" >下载P12/PFX</button>
+     </div>
+</div>	
+ </div>
+	<div id="keypair-show">
+			<div class="pri-container">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px; color: #01AAED;">
+					<legend>私钥</legend>
+				</fieldset>
+				<pre class="layui-code" lay-title="私钥" lay-skin="notepad"  >
+				私钥
+                </pre>
+			</div>
+				<div class="pub-container">
+					<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px; color: #01AAED;">
+					<legend>公钥</legend>
+				</fieldset>
+				<pre class="layui-code" lay-title="公钥" lay-skin="notepad">
+				公钥
+                </pre>
+				</div>
+			</div>
+	
+	
+<script type="text/javascript" src="../layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var form = layui.form;
+		var code =layui.code;
+		var laydate = layui.laydate;
+		 //证书日期
+		  laydate.render({
+		    elem: '#startDate',
+		    min: 0 
+		  });
+		//证书截止日期
+		  laydate.render({
+		    elem: '#endDate',
+		    min: 0 
+		  });
+		//code渲染
+		layui.code({
+			  elem: 'pre',
+			  about:false
+			});
+		
+		form.on('submit(cert-create)', function (data) {
+			var formData = data.field;
+			$.ajax({  
+		        url : 'api/cert',  
+		        async : true, 
+		        type : "post", 
+		        contentType : "application/json",
+		        data : JSON.stringify(formData),
+		        dataType : "json",  
+		        success : function(result) {
+		        	$('#keypair-show .pri-container .layui-code').html("");
+	        		$('#keypair-show .pub-container .layui-code').html("");
+		        	if(result.status!=1){
+		        		if(result.code==401){
+		        			layer.alert(result.msg);
+		        			//询问框
+		        			layer.confirm('token过期,重新登陆？', {
+		        				 btn: ['是', '否']
+		        			}, function(){
+		        				window.location.href="../login.html"
+		        			}, function(){
+		        			});
+		        		}else{
+		        			layer.alert(result.msg);
+		        		}
+		        		return;
+		        	}else{
+		        		layer.msg("生成成功");
+		        		localStorage.setItem("serialNumber",result.info.serialNumber);
+		        		$('#keypair-show .pri-container .layui-code').html(result.info.pri);
+		        		$('#keypair-show .pub-container .layui-code').html(result.info.pub);
+		        	}
+		        	
+		        }
+		        });
+			
+		});
+		
+		$("#down-p12").click(function(){
+			var serialNumber=localStorage.getItem("serialNumber");
+			if(!serialNumber){
+				layer.alert("p12证书未生成,不可下载");
+			}else{
+				window.open("api/downCertZip?serialNumber="+serialNumber);
+			}
+		});
+	
+		
+	</script>
+</body>
+</html>

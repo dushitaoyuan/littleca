@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>公钥对生成</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../layui/css/layui.css" rel="stylesheet" type="text/css"
+	media="all" />
+<script type="text/javascript" src="../js/jquery-1.11.3.min.js"></script>
+<link href="../css/create.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<iframe src="../header.html" height="230px" width="1200px" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" ></iframe>
+	<div class="site-title">
+		<fieldset>
+			<legend>
+				<a name="default" style="color: #01AAED;">生成证书</a>
+			</legend>
+		</fieldset>
+	</div>
+	<div class="layui-tab">
+		<ul class="layui-tab-title">
+			<li class="layui-this">RSA</li>
+			<li>SM2</li>
+			<li>ECDSA</li>
+			<li>DSA</li>
+		</ul>
+		<div class="layui-tab-content">
+			<div class="layui-tab-item layui-show ">
+				<div class="layui-form" lay-filter="form-rsa">
+					<div class="layui-form-item">
+						<label class="layui-form-label">密钥位数</label>
+						<div class="layui-input-block">
+							<input type="radio" name="keySize" value="1024" title="1024" checked="checked">
+							<input type="radio" name="keySize" value="2048" title="2048">
+						   <button class="layui-btn" lay-submit lay-filter="rsa_create" >生成</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+				<div class="layui-form" lay-filter="form-SM2">
+					<div class="layui-form-item">
+						   <button class="layui-btn" lay-submit lay-filter="sm2_create" >生成</button>
+					</div>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+			
+			<div class="layui-form" lay-filter="form-ec">
+					<div class="layui-form-item">
+						   <button class="layui-btn" lay-submit lay-filter="ec_create" >生成</button>
+					</div>
+				</div>
+			</div>
+			<div class="layui-tab-item">
+			<div class="layui-form" lay-filter="form-dsa">
+					<div class="layui-form-item">
+						<label class="layui-form-label">密钥位数</label>
+						<div class="layui-input-block">
+							<input type="radio" name="keySize" value="1024" title="1024" checked="checked">
+							<input type="radio" name="keySize" value="2048" title="2048">
+						   <button class="layui-btn" lay-submit lay-filter="dsa_create" >生成</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="keypair-show">
+			<div class="pri-container">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px; color: #01AAED;">
+					<legend>私钥</legend>
+				</fieldset>
+				<pre class="layui-code" lay-title="私钥" lay-skin="notepad"  >
+				私钥
+                </pre>
+			</div>
+				<div class="pub-container">
+					<fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px; color: #01AAED;">
+					<legend>公钥</legend>
+				</fieldset>
+				<pre class="layui-code" lay-title="公钥" lay-skin="notepad">
+				公钥
+                </pre>
+				</div>
+			</div>
+		</div>
+	</div>
+<script type="text/javascript" src="../layui/layui.all.js"></script>
+	<script type="text/javascript">
+		var form = layui.form;
+		var code =layui.code;
+		layui.code({
+			  elem: 'pre',
+			  about:false
+			});
+		
+		form.on('submit(rsa_create)', function (data) {
+			var formData = data.field;
+			create("1",formData.keySize);
+		});
+		form.on('submit(sm2_create)', function (data) {
+			create("2");
+		});
+		form.on('submit(ec_create)', function (data) {
+			create("3");
+		});
+		form.on('submit(dsa_create)', function (data) {
+			var formData = data.field;
+			create("4",formData.keySize);
+		});
+		
+		function create(type,keySize){
+			$.ajax({  
+		        url : 'api/create',  
+		        async : true, 
+		        type : "post", 
+		        contentType : "application/json",
+		        data : JSON.stringify({"type":type,"keySize":keySize}),
+		        dataType : "json",  
+		        success : function(result) {
+		        	$('#keypair-show .pri-container .layui-code').html("");
+	        		$('#keypair-show .pub-container .layui-code').html("");
+		        	if(result.status!=1){
+		        		
+		        		if(result.code==401){
+		        			layer.alert(result.msg);
+		        			//询问框
+
+		        			layer.confirm('token过期,重新登陆？', {
+		        				 btn: ['是', '否']
+		        			}, function(){
+		        				window.location.href="../login.html"
+		        			}, function(){
+		        			});
+		        			
+		        		
+		        		}else{
+		        			layer.alert(result.msg);
+		        		}
+		        		return;
+		        	}else{
+		        		layer.msg("生成成功");
+		        		$('#keypair-show .pri-container .layui-code').html(result.info.pri);
+		        		$('#keypair-show .pub-container .layui-code').html(result.info.pub);
+		        	}
+		        	
+		        }
+		        });
+		}
+		
+	</script>
+</body>
+</html>
