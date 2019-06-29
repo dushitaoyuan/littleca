@@ -25,12 +25,18 @@ public class KeyPairUtil {
 		KeyPairResult keyPairResult = new KeyPairResult();
 		switch (type) {
 		case RSA:
-		case DSA:
-		case ECDSA:{
+		case DSA:{
 			KeyPairGenerator kpg = KeyPairGenerator.getInstance(type.name, BouncyCastleProvider.PROVIDER_NAME);
 			if(null!=keySize) {
 				kpg.initialize(keySize);
 			}
+			KeyPair keyPair = kpg.generateKeyPair();
+			keyPairResult.setPri(keyPair.getPrivate());
+			keyPairResult.setPub(keyPair.getPublic());
+			return keyPairResult;
+		}
+		case ECDSA:{
+			KeyPairGenerator kpg = KeyPairGenerator.getInstance(type.name, BouncyCastleProvider.PROVIDER_NAME);
 			KeyPair keyPair = kpg.generateKeyPair();
 			keyPairResult.setPri(keyPair.getPrivate());
 			keyPairResult.setPub(keyPair.getPublic());

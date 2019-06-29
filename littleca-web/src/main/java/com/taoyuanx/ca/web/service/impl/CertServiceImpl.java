@@ -5,7 +5,9 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 
+import com.taoyuanx.ca.web.config.AppConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.taoyuanx.ca.openssl.cert.CertUtil;
@@ -20,13 +22,13 @@ import com.taoyuanx.ca.web.util.KeyPairUtil;
 @Service
 public class CertServiceImpl implements CertService {
 	@Autowired
-	CaConfig caConfig;
-
+	AppConfig appConfig;
 	@Override
 	public CertResult certToUser(CertReq req,Integer keySize) throws Exception {
+		CaConfig caConfig = appConfig.getByKeyType(req.getCatype());
 		CertResult certResult = new CertResult();
-		String signAlg = req.getSignAlg() == null ? caConfig.getDefaultSignAlg() : req.getSignAlg();
-		KeyPairResult keyPairResult = KeyPairUtil.gen(caConfig.getCaType(), keySize);
+		String signAlg = req.getSignAlg() == null ? caConfig.getSignAlg() : req.getSignAlg();
+		KeyPairResult keyPairResult = KeyPairUtil.gen(KeyType.forValue(req.getCatype()), keySize);
 		PublicKey pub = keyPairResult.getPub();
 		PrivateKey pri = keyPairResult.getPri();
 		X509Certificate userCert = CertUtil.makeUserCert(pub, caConfig.getPub(), caConfig.getPri(),
@@ -44,5 +46,6 @@ public class CertServiceImpl implements CertService {
 		KeyPairResult keyPairResult = KeyPairUtil.gen(type, keySize);
 		return keyPairResult;
 	}
+
 
 }

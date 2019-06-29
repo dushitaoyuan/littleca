@@ -77,30 +77,51 @@
     </div>
  
   </div>
- <div id="dy-content">
-    <div class="layui-form-item">
-   	<label class="layui-form-label">密钥位数</label>
-	<div class="layui-input-block">
-		<input type="radio" name="keySize" value="1024" title="1024" checked="checked">
-		<input type="radio" name="keySize" value="2048" title="2048">
-	</div>
-	</div>
-   <div class="layui-form-item" style="width: 950px;">
-    <label class="layui-form-label">签名算法</label>
-    <div class="layui-input-block">
-      <select name="signAlg" lay-filter="signAlg" >
-       <option value="SHA256WITHRSA" selected="">SHA256WITHRSA</option>
-        <option value="MD5WITHRSA" >MD5WITHRSA</option>
-        <option value="SHA1WITHRSA" >SHA1WITHRSA</option>
-      </select>
-    </div>
-  </div>
-  
- </div>
+
+
+     <div class="layui-tab">
+         <ul class="layui-tab-title">
+             <li class="layui-this"  onclick="certChoose('1')">RSA</li>
+             <li onclick="certChoose('2')">SM2</li>
+             <li onclick="certChoose('3')">ECDSA</li>
+             <li onclick="certChoose('4')">DSA</li>
+         </ul>
+         <div class="layui-tab-content" >
+             <div class="layui-tab-item layui-show" id="rsa">
+                 <div class="layui-form-item">
+                     <input type="hidden" name="catype" value="1"  >
+                     <label class="layui-form-label">密钥位数</label>
+                     <div class="layui-input-block">
+                         <input type="radio" name="keySize" value="1024" title="1024" checked="checked">
+                         <input type="radio" name="keySize" value="2048" title="2048">
+                     </div>
+                 </div>
+                 <div class="layui-form-item" style="width: 950px;">
+                     <label class="layui-form-label">签名算法</label>
+                     <div class="layui-input-block">
+                         <select name="signAlg">
+                             <option value="SHA256WITHRSA" selected="selected">SHA256WITHRSA</option>
+                             <option value="MD5WITHRSA" >MD5WITHRSA</option>
+                             <option value="SHA1WITHRSA" >SHA1WITHRSA</option>
+                         </select>
+                     </div>
+                 </div>
+             </div>
+             <div class="layui-tab-item" id="sm2" >
+
+             </div>
+             <div class="layui-tab-item" id="ecdsa" >
+
+             </div>
+             <div class="layui-tab-item" id="dsa" >
+
+             </div>
+         </div>
+     </div>
      <div class="layui-form-item op-div">
-      <button class="layui-btn" lay-submit lay-filter="cert-create" >证书生成</button>
-      <button type="reset" class="layui-btn layui-btn-primary">清空</button>
-      <button type="button" class="layui-btn" id="down-p12" >下载P12/PFX</button>
+         <button class="layui-btn" lay-submit lay-filter="cert-create" >证书生成</button>
+         <button type="reset" class="layui-btn layui-btn-primary">清空</button>
+         <button type="button" class="layui-btn" id="down-p12" >下载P12/PFX</button>
      </div>
 </div>	
  </div>
@@ -126,6 +147,83 @@
 	
 <script type="text/javascript" src="../layui/layui.all.js"></script>
 	<script type="text/javascript">
+        var rsa_html="  <div class=\"layui-form-item\">\n" +
+            "                     <input type=\"hidden\" name=\"catype\" value=\"1\"  >\n" +
+            "                     <label class=\"layui-form-label\">密钥位数</label>\n" +
+            "                     <div class=\"layui-input-block\">\n" +
+            "                         <input type=\"radio\" name=\"keySize\" value=\"1024\" title=\"1024\" checked=\"checked\">\n" +
+            "                         <input type=\"radio\" name=\"keySize\" value=\"2048\" title=\"2048\">\n" +
+            "                     </div>\n" +
+            "                 </div>\n" +
+            "                 <div class=\"layui-form-item\" style=\"width: 950px;\">\n" +
+            "                     <label class=\"layui-form-label\">签名算法</label>\n" +
+            "                     <div class=\"layui-input-block\">\n" +
+            "                         <select name=\"signAlg\">\n" +
+            "                             <option value=\"SHA256WITHRSA\" selected=\"selected\">SHA256WITHRSA</option>\n" +
+            "                             <option value=\"MD5WITHRSA\" >MD5WITHRSA</option>\n" +
+            "                             <option value=\"SHA1WITHRSA\" >SHA1WITHRSA</option>\n" +
+            "                         </select>\n" +
+            "                     </div>\n" +
+            "                 </div>";
+        var sm2_html="   <div class=\"layui-form\">\n" +
+            "                     <input type=\"hidden\" name=\"catype\" value=\"2\">\n" +
+            "                     <div class=\"layui-form-item\">\n" +
+            "                         <select name=\"signAlg\"  >\n" +
+            "                             <option value=\"SM3WITHSM2\" selected=\"selected\">SM3WITHSM2</option>\n" +
+            "                         </select>\n" +
+            "                     </div>\n" +
+            "                 </div>";
+        var ecdsa_html="     <div class=\"layui-form\">\n" +
+            "                     <input type=\"hidden\" name=\"catype\" value=\"3\"  >\n" +
+            "                     <div class=\"layui-form-item\" style=\"width: 950px;\">\n" +
+            "                         <label class=\"layui-form-label\">签名算法</label>\n" +
+            "                         <div class=\"layui-input-block\">\n" +
+            "                             <select name=\"signAlg\" >\n" +
+            "                                 <option value=\"SHA1WITHECDSA\" selected=\"selected\">SHA1WITHECDSA</option>\n" +
+            "                             </select>\n" +
+            "                         </div>\n" +
+            "                     </div>\n" +
+            "\n" +
+            "                 </div>";
+        var dsa_html="      <div class=\"layui-form\">\n" +
+            "                     <div class=\"layui-form-item\">\n" +
+            "                         <input type=\"hidden\" name=\"catype\" value=\"4\"  >\n" +
+            "                         <label class=\"layui-form-label\">密钥位数</label>\n" +
+            "                         <div class=\"layui-input-block\">\n" +
+            "                             <input type=\"radio\" name=\"keySize\" value=\"1024\" title=\"1024\" checked=\"checked\">\n" +
+            "                             <input type=\"radio\" name=\"keySize\" value=\"2048\" title=\"2048\">\n" +
+            "                         </div>\n" +
+            "                     </div>\n" +
+            "                     <div class=\"layui-form-item\" style=\"width: 950px;\">\n" +
+            "                         <label class=\"layui-form-label\">签名算法</label>\n" +
+            "                         <div class=\"layui-input-block\">\n" +
+            "                             <select name=\"signAlg\">\n" +
+            "                                 <option value=\"SHA1WITHDSA\" selected=\"selected\">SHA1WITHDSA</option>\n" +
+            "                                 <option value=\"SHA256WITHDSA\">SHA256WITHDSA</option>\n" +
+
+            "                             </select>\n" +
+            "                         </div>\n" +
+            "                     </div>\n" +
+            "                 </div>";
+
+
+        function  certChoose(certType) {
+            if(certType=="1"){
+                $(".layui-tab-item").empty();
+                $("#rsa").html(rsa_html);
+            }
+            if(certType=="2"){
+                $("#sm2").html(sm2_html);
+            }
+            if(certType=="3"){
+                $("#ecdsa").html(ecdsa_html);
+            }
+            if(certType=="4"){
+                $("#dsa").html(dsa_html);
+            }
+            var form = layui.form;
+            form.render();
+        }
 		var form = layui.form;
 		var code =layui.code;
 		var laydate = layui.laydate;
@@ -174,6 +272,7 @@
 		        	}else{
 		        		layer.msg("生成成功");
 		        		localStorage.setItem("serialNumber",result.info.serialNumber);
+                        localStorage.setItem("catype",result.info.catype);
 		        		$('#keypair-show .pri-container .layui-code').html(result.info.pri);
 		        		$('#keypair-show .pub-container .layui-code').html(result.info.pub);
 		        	}
@@ -185,10 +284,11 @@
 		
 		$("#down-p12").click(function(){
 			var serialNumber=localStorage.getItem("serialNumber");
+            var catype=localStorage.getItem("catype");
 			if(!serialNumber){
 				layer.alert("p12证书未生成,不可下载");
 			}else{
-				window.open("api/downCertZip?serialNumber="+serialNumber);
+				window.open("api/downCertZip?serialNumber="+serialNumber+"&catype="+catype);
 			}
 		});
 	

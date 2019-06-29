@@ -13,10 +13,12 @@ import javax.crypto.Cipher;
 import org.apache.commons.codec.binary.Base64;
 
 import com.taoyuanx.ca.util.Util;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public final class RSAUtil {
+	 private static Logger LOG=LoggerFactory.getLogger(RSAUtil.class);
 	public static final String KEYSTORE_TYPE_P12 = "PKCS12";
 	public static final String KEYSTORE_TYPE_JKS = "JKS";
 	public static final String ENCRYPT_TYPE_RSA = "RSA";
@@ -156,14 +158,12 @@ public final class RSAUtil {
 			boolean bverify = signature.verify(Base64.decodeBase64(signvalue));
 			return bverify;
 		} catch (Exception e) {
-			System.err.println(e);
+			LOG.error("签名验证异常->{}",e);
 			return false;
 		}
 	}
 	
-	public static void main(String[] args) throws Exception {
-		
-	}
+
 
 
 }

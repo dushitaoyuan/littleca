@@ -27,7 +27,7 @@ import com.taoyuanx.ca.openssl.cert.CertUtil;
  */
 public class ECDSACATestExample {
 	//存储基础目录
-	public static final String baseCertPath="C://Users/都市桃源/Desktop/ca证书/cert/ecdsa/";
+	public static final String baseCertPath="e://client/cert/ecdsa/";
 	static {
 		Security.addProvider(ProviderInstance.getBCProvider());
 		try {
@@ -75,7 +75,7 @@ public class ECDSACATestExample {
 		Date notAfter=instance.getTime();
 		String signHash="SHA1";
 		String alg="ECDSA";
-		testCreateCA(issuerDN, notBefore, notAfter, serialNumber, signHash, alg);
+	//	testCreateCA(issuerDN, notBefore, notAfter, serialNumber, signHash, alg);
 		X509Certificate CACert = CertUtil.readX509Cert(caCert_base64);
 		PrivateKey privateKey = CertUtil.readPrivateKeyPem(caPrivatePath);
 		testECDSA(CACert, privateKey, userDN);

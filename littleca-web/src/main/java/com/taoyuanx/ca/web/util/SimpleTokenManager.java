@@ -26,15 +26,15 @@ public class SimpleTokenManager {
 	public  String createToken(Map<String,String> data, Long time,TimeUnit timeUnit) {
 		Long end=System.currentTimeMillis()+timeUnit.toMillis(time);
 		data.put("end", String.valueOf(end));
-		String temp=mapToString(data);
-		String sign = Base64.encodeBase64URLSafeString(hmac.hmac(temp));
-		String token=Base64.encodeBase64URLSafeString(temp.getBytes())+"."+sign;
+		String signData=mapToString(data);
+		String sign = Base64.encodeBase64URLSafeString(hmac.hmac(signData));
+		String token=Base64.encodeBase64URLSafeString(signData.getBytes())+"."+sign;
 		return token;
 	}
 	public  String createToken(String hmacKey,Map<String,String> data) {
-		String temp=mapToString(data);
-		String sign = Base64.encodeBase64URLSafeString(new HmacUtils(HmacAlgorithms.HMAC_MD5, hmacKey).hmac(temp));
-		String token=Base64.encodeBase64URLSafeString(temp.getBytes())+"."+sign;
+		String signData=mapToString(data);
+		String sign = Base64.encodeBase64URLSafeString(new HmacUtils(HmacAlgorithms.HMAC_MD5, hmacKey).hmac(signData));
+		String token=Base64.encodeBase64URLSafeString(signData.getBytes())+"."+sign;
 		return token;
 	}
 	
@@ -64,7 +64,7 @@ public class SimpleTokenManager {
 			return stringToMap;
 		
 	}
-	public Map<String,String> stringToMap(String mapString){
+	private Map<String,String> stringToMap(String mapString){
 		String[] split = mapString.split(";");
 		Map<String,String> map=new HashMap<String, String>(split.length);
 		for(String keyValue:split){
@@ -73,12 +73,11 @@ public class SimpleTokenManager {
 		}
 		return map;
 	}
-	public String mapToString(Map<String,String> map){
-		Set<String> keySet = map.keySet();
+	private String mapToString(Map<String,String> map){
 		StringBuilder buf=new StringBuilder();
-		for(String key:keySet){
+		map.forEach((key,value)->{
 			buf.append(key).append("=").append(map.get(key)).append(";");
-		}
+		});
 		return buf.substring(0, buf.length()-1);
 		
 	}

@@ -11,7 +11,7 @@ import com.taoyuanx.ca.api.AsymmetricalUtil;
  * dsa 实现
  * @author 都市桃源
  * 2018年7月1日下午10:36:40
- * TODO
+ *  DSA 不支持签名
  */
 public class DSA  implements AsymmetricalSignature{
 	@Override

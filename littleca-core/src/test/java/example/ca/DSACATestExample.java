@@ -27,7 +27,7 @@ import com.taoyuanx.ca.openssl.cert.CertUtil;
  */
 public class DSACATestExample {
 	//存储基础目录
-	public static final String baseCertPath="C://Users/都市桃源/Desktop/ca证书/cert/dsa/";
+	public static final String baseCertPath="e://client/cert/dsa/";
 	static {
 		Security.addProvider(ProviderInstance.getBCProvider());
 		try {
@@ -76,7 +76,7 @@ public class DSACATestExample {
 		Date notAfter=instance.getTime();
 		String signHash="SHA1";
 		String alg="DSA";
-		testCreateCA(issuerDN, notBefore, notAfter, serialNumber, signHash, alg);
+		//testCreateCA(issuerDN, notBefore, notAfter, serialNumber, signHash, alg);
 		X509Certificate CACert = CertUtil.readX509Cert(caCert_base64);
 		PrivateKey privateKey = CertUtil.readPrivateKeyPem(caPrivatePath);
 		testDSA(CACert, privateKey, userDN);
@@ -122,7 +122,7 @@ public class DSACATestExample {
 		instance.add(Calendar.YEAR, 1);
 		Date notAfter=instance.getTime();
 		BigInteger serialNumber=BigInteger.valueOf(1L);
-		String signAlg="SHA1WITHDSA";
+		String signAlg="SHA256WITHDSA";
 		X509Certificate x509Certificate = ica.makeUserCert(keyPair.getPublic(), CACert.getIssuerDN().toString(), userDN, notBefore, notAfter, serialNumber, signAlg);
 		//保存
 		CertUtil.saveX509CertBase64(x509Certificate, baseCertPath+"client/client_base64.cer");

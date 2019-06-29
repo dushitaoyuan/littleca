@@ -27,7 +27,7 @@ import com.taoyuanx.ca.sm.interfaces.impl.Sm2KeyPairImpl;
  */
 public class SM2CATestExample {
 	//存储基础目录
-	public static final String baseCertPath="l://sm2/ca证书/cert/sm2/";
+	public static final String baseCertPath="e://client/cert/sm2/";
 	static {
 		Security.addProvider(ProviderInstance.getBCProvider());
 		try {

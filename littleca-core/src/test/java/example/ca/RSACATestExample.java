@@ -27,7 +27,7 @@ import com.taoyuanx.ca.openssl.cert.CertUtil;
  */
 public class RSACATestExample {
 	//存储基础目录
-	public static final String baseCertPath="L:/sm2/ca证书/cert/rsa/";
+	public static final String baseCertPath="e://client/cert/rsa/";
 	static {
 		Security.addProvider(ProviderInstance.getBCProvider());
 		try {

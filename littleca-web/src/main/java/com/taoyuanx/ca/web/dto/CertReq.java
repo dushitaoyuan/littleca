@@ -19,6 +19,7 @@ public class CertReq {
 	 * notAfter 证书到期时间
 	 * signAlg 签名算法
 	 * serialNumber 证书序列号
+	 * catype 证书类型
 	 */
 	private String E;
 	private String CN;
@@ -35,6 +36,19 @@ public class CertReq {
 	private String serialNumber;
 	//秘钥位数
 	private String keySize;
+
+	private Integer catype;
+
+	public Integer getCatype() {
+		return catype;
+	}
+
+	public void setCatype(Integer catype) {
+		this.catype = catype;
+	}
+
+
+
 	
 	public String getE() {
 		return E;

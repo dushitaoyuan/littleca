@@ -14,7 +14,6 @@ import com.taoyuanx.ca.api.AsymmetricalUtil;
  * rsa非对称操作 实现
  * @author 都市桃源
  * 2018年7月1日下午10:36:40
- * TODO
  */
 public class ECDSA implements AsymmetricalSignature,AsymmetricalCipher{
 	
@@ -41,9 +40,7 @@ public class ECDSA implements AsymmetricalSignature,AsymmetricalCipher{
 		
 		Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.ECIES_CIPHER);
 		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-		// 分组加密
 		byte[] doFinal = cipher.doFinal(data);
-		System.out.println("原文长度:"+data.length+"密文长度:"+doFinal.length+"outsize:"+cipher.getOutputSize(data.length)+"blockSize:"+	cipher.getBlockSize());
 		return doFinal;
 	}
 
@@ -52,9 +49,7 @@ public class ECDSA implements AsymmetricalSignature,AsymmetricalCipher{
 
 		Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.ECIES_CIPHER);
 		cipher.init(Cipher.DECRYPT_MODE, privateKey);
-		// 分组加密
 		byte[] doFinal = cipher.doFinal(data);
-		System.out.println("原文长度:"+data.length+"密文长度:"+doFinal.length+"outsize:"+cipher.getOutputSize(data.length)+"blockSize:"+	cipher.getBlockSize());
 		return doFinal;
 	}
 

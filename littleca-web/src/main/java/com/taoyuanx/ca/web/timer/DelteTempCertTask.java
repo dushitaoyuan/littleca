@@ -25,7 +25,7 @@ public class DelteTempCertTask {
 	 */
 	@Scheduled(cron="0 0 4 * * ?")
 	public void delteTempCertTask(){
-		String clientCertBasePath = appConfig.getClientCertBasePath();
+		String clientCertBasePath = appConfig.getCertBaseDir();
 		final Long now=System.currentTimeMillis();
 		final Long deleleTimeSpan=20*60*1000L;
 		Collection<File> listFiles = FileUtils.listFiles(new File(clientCertBasePath), new SuffixFileFilter("zip"),new DirectoryFileFilter(){
