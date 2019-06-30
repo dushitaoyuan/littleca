@@ -2,7 +2,11 @@ package com.taoyuanx.ca.web.timer;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
 
+import com.taoyuanx.ca.web.common.CAConstant;
+import com.taoyuanx.ca.web.config.CaConfig;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
@@ -25,7 +29,16 @@ public class DelteTempCertTask {
 	 */
 	@Scheduled(cron="0 0 4 * * ?")
 	public void delteTempCertTask(){
-		String clientCertBasePath = appConfig.getCertBaseDir();
+		Map<CAConstant.KeyType, CaConfig> allCaConfig = appConfig.getAllCaConfig();
+		if(Objects.nonNull(allCaConfig)){
+			allCaConfig.values().stream().forEach(caConfig -> {
+				deleteTempCert(caConfig.getClientCertBasePath());
+			});
+		}
+
+	}
+
+	private  void deleteTempCert(String clientCertBasePath){
 		final Long now=System.currentTimeMillis();
 		final Long deleleTimeSpan=20*60*1000L;
 		Collection<File> listFiles = FileUtils.listFiles(new File(clientCertBasePath), new SuffixFileFilter("zip"),new DirectoryFileFilter(){
@@ -40,13 +53,13 @@ public class DelteTempCertTask {
 				}
 				return false;
 			}
-			
+
 		});
 		if(null!=listFiles||!listFiles.isEmpty()){
 			for(File file:listFiles){
 				try {
 					if(file.isDirectory()){
-						FileUtils.deleteDirectory(file);	
+						FileUtils.deleteDirectory(file);
 					}else{
 						FileUtils.deleteQuietly(file);
 					}
@@ -56,7 +69,6 @@ public class DelteTempCertTask {
 				}
 			}
 		}
-		
 	}
 
 }

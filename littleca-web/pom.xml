@@ -13,6 +13,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.5.4.RELEASE</version>
+
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -24,6 +25,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<java.version>1.8</java.version>
+		<skipTests>true</skipTests>
 	</properties>
 
 
@@ -91,10 +93,10 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-				 <!--   <layout>ZIP</layout> -->
+			<!--	<configuration>
+				    <layout>ZIP</layout>
 					<mainClass>com.taoyuanx.ca.web.AppServerApplication</mainClass>
-				</configuration>
+				</configuration>-->
 				<executions>
 					<execution>
 						<goals>
@@ -102,14 +104,30 @@
 						</goals>
 					</execution>
 				</executions>
+				<dependencies>
+					<dependency>
+						<!-- 加入该配置，使用maven package，依赖jar不会打包在项目最终jar文件内
+						启动jar 加入参数  -Dthin.root=. -jar
+						-->
+						<groupId>org.springframework.boot.experimental</groupId>
+						<artifactId>spring-boot-thin-layout</artifactId>
+						<version>1.0.12.RELEASE</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>8</source>
-					<target>8</target>
-				</configuration>
+				<groupId>org.springframework.boot.experimental</groupId>
+				<artifactId>spring-boot-thin-maven-plugin</artifactId>
+				<version>1.0.12.RELEASE</version>
+				<executions>
+					<execution>
+						<id>resolve</id>
+						<goals>
+							<goal>resolve</goal>
+						</goals>
+						<inherited>false</inherited>
+					</execution>
+				</executions>
 			</plugin>
 
 		</plugins>
