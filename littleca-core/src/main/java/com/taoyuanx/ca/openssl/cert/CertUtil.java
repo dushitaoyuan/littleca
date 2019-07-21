@@ -1,11 +1,6 @@
 package com.taoyuanx.ca.openssl.cert;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.KeyFactory;
 import java.security.KeyStore;
@@ -395,28 +390,7 @@ public class CertUtil {
 		return KEYSTORE_TYPE_P12;
 	}
 
-	/**
-	 * 读取PKCS12 秘钥
-	 * 
-	 * @param filePath
-	 * @param keyPassword
-	 * @param keyStoreType
-	 * @return
-	 * @throws Exception
-	 */
-	public static KeyStore readKeyStore(String filePath, String keyPassword, String keyStoreType) throws CertException {
-		try {
-			if (null == keyStoreType) {
-				keyStoreType = guessKeystoreType(filePath);
-			}
-			KeyStore keyStore = KeyStore.getInstance(keyStoreType, BouncyCastleProvider.PROVIDER_NAME);
-			FileInputStream file = new FileInputStream(new File(filePath));
-			keyStore.load(file, keyPassword.toCharArray());
-			return keyStore;
-		} catch (Exception e) {
-			throw new CertException("read KeyStore failed", e);
-		}
-	}
+
 
 	public static KeyStore readKeyStore(String filePath, String keyPassword) throws CertException {
 		try {
@@ -428,7 +402,15 @@ public class CertUtil {
 			throw new CertException("read KeyStore failed", e);
 		}
 	}
-
+	public static KeyStore readKeyStore(InputStream inputStream, String keyStoreType,String keyPassword) throws CertException {
+		try {
+			KeyStore keyStore = KeyStore.getInstance(keyStoreType, BouncyCastleProvider.PROVIDER_NAME);
+			keyStore.load(inputStream, keyPassword.toCharArray());
+			return keyStore;
+		} catch (Exception e) {
+			throw new CertException("read KeyStore failed", e);
+		}
+	}
 	public static PublicKey getPublicKey(KeyStore keyStore, String alias) throws CertException {
 		try {
 			Enumeration<String> aliases = keyStore.aliases();

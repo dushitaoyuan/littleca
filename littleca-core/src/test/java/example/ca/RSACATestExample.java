@@ -110,7 +110,6 @@ public class RSACATestExample {
 	 * @param CACert
 	 * @param privateKey
 	 * @param userDN
-	 * @param issuerDN
 	 * @throws Exception
 	 */
 	public static void testRSA(X509Certificate CACert, PrivateKey privateKey,String userDN) throws Exception {

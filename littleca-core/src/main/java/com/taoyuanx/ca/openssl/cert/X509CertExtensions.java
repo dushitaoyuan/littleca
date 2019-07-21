@@ -47,6 +47,7 @@ public class X509CertExtensions {
 		List<KeyPurposeId> list = new ArrayList<>();
 		list.add(KeyPurposeId.id_kp_OCSPSigning);
 		list.add(KeyPurposeId.id_kp_capwapAC);
+		list.add(KeyPurposeId.id_kp_timeStamping);
 		KeyPurposeId[] usages = new KeyPurposeId[list.size()];
 		ExtendedKeyUsage extendedKeyUsage = new ExtendedKeyUsage(list.toArray(usages));
 		return extendedKeyUsage;
@@ -108,7 +109,6 @@ public class X509CertExtensions {
 		certBuilder.addExtension(Extension.keyUsage, true, X509CertExtensions.builldKeyUsage());
 		// 增强密钥用法
 		certBuilder.addExtension(Extension.extendedKeyUsage, true, X509CertExtensions.builldExtendKeyUsage());
-
 		// 主题备用名称扩展
 		/*certBuilder.addExtension(Extension.issuerAlternativeName, true, X509CertExtensions
 				.buildSubjectAlternativeName(new GeneralName(GeneralName.rfc822Name, "lianglei_lzx@163.com")));*/

@@ -8,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.taoyuanx.ca.web.AppServerApplication;
-import com.taoyuanx.ca.web.common.CAConstant;
-import com.taoyuanx.ca.web.dto.CertReq;
-import com.taoyuanx.ca.web.dto.CertResult;
-import com.taoyuanx.ca.web.dto.KeyPairResult;
-import com.taoyuanx.ca.web.service.CertService;
+import com.taoyuanx.ca.AppServerApplication;
+import com.taoyuanx.ca.common.CAConstant;
+import com.taoyuanx.ca.dto.CertReq;
+import com.taoyuanx.ca.dto.KeyPairResult;
+import com.taoyuanx.ca.service.CertService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes=AppServerApplication.class)

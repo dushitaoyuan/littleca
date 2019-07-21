@@ -95,7 +95,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			<!--	<configuration>
 				    <layout>ZIP</layout>
-					<mainClass>com.taoyuanx.ca.web.AppServerApplication</mainClass>
+					<mainClass>AppServerApplication</mainClass>
 				</configuration>-->
 				<executions>
 					<execution>
