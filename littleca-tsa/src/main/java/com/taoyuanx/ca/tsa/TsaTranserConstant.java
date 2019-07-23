@@ -1,4 +1,4 @@
-package com.taoyuanx.ca;
+package com.taoyuanx.ca.tsa;
 
 /**
  * @author dushitaoyuan
@@ -17,7 +17,7 @@ public interface TsaTranserConstant {
         if (encoding == null) {
             return false;
         }
-        if (TsaTranserConstant.TRANSFER_ENCODING_BASE64.equalsIgnoreCase(encoding)) {
+        if (TRANSFER_ENCODING_BASE64.equalsIgnoreCase(encoding)) {
             return true;
         }
         return false;

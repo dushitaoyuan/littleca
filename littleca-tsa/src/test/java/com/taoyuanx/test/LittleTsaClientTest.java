@@ -1,6 +1,6 @@
 package com.taoyuanx.test;
 
-import com.taoyuanx.ca.TsaTranserConstant;
+import com.taoyuanx.ca.tsa.TsaTranserConstant;
 import com.taoyuanx.ca.tsa.client.TsaClient;
 import com.taoyuanx.ca.tsa.client.impl.LittleTsaClientImpl;
 import okhttp3.OkHttpClient;

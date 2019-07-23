@@ -1,6 +1,6 @@
 package com.taoyuanx.ca.web;
 
-import com.taoyuanx.ca.TsaTranserConstant;
+import com.taoyuanx.ca.tsa.TsaTranserConstant;
 import com.taoyuanx.ca.tsa.TimeStampService;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.tsp.TimeStampRequest;
