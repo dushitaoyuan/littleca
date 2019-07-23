@@ -77,6 +77,7 @@ public class LittleTimeStampServiceImpl implements TimeStampService {
 
         DigestCalculatorProvider build = new JcaDigestCalculatorProviderBuilder().setProvider(BouncyCastleProvider.PROVIDER_NAME).build();
         DigestAlgorithmIdentifierFinder digestAlgorithmIdentifierFinder = new DefaultDigestAlgorithmIdentifierFinder();
+
         AlgorithmIdentifier sha256 = digestAlgorithmIdentifierFinder.find("SHA256");
         DigestCalculator digestCalculator = build.get(sha256);
         return new TimeStampTokenGenerator(signerInfoGen, digestCalculator, new ASN1ObjectIdentifier("1.2.3"));
