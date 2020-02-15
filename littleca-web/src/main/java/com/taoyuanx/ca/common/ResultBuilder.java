@@ -15,7 +15,6 @@ public class ResultBuilder<T> {
 		return res;
 	 }
 	/**成功
-	 * @param info
 	 * @return
 	 */
 	public static  Result buildOkResult(String msg){

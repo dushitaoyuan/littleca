@@ -11,19 +11,18 @@ import java.util.Date;
 
 import com.taoyuanx.ca.api.ICA;
 import com.taoyuanx.ca.api.impl.CAImpl;
-import com.taoyuanx.ca.openssl.ProviderInstance;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
+import com.taoyuanx.ca.bc.ProviderInstance;
 import com.taoyuanx.ca.sm.interfaces.Sm2KeyPair;
 import com.taoyuanx.ca.sm.interfaces.Sm2PrivateKey;
 import com.taoyuanx.ca.sm.interfaces.Sm2PublicKey;
 import com.taoyuanx.ca.sm.interfaces.impl.Sm2KeyPairImpl;
+import com.taoyuanx.ca.util.CertUtil;
 
 
 /**
  * @author 都市桃源
  * 2018年6月23日下午8:25:17
  * dsa CA example 
- * TODO
  */
 public class SM2CATestExample {
 	//存储基础目录
@@ -113,7 +112,6 @@ public class SM2CATestExample {
 	 * @param CACert
 	 * @param privateKey
 	 * @param userDN
-	 * @param issuerDN
 	 * @throws Exception
 	 */
 	public static void testSm2(X509Certificate CACert, PrivateKey privateKey,String userDN) throws Exception {

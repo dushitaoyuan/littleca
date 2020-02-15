@@ -7,14 +7,13 @@ import java.util.Random;
 
 import com.taoyuanx.ca.api.AsymmetricalSignature;
 import com.taoyuanx.ca.api.impl.DSA;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.util.ByteStringUtil;
+import com.taoyuanx.ca.util.CertUtil;
 
 /**
  * rsa 操作示例
  * @author 都市桃源
  * 2018年7月1日下午11:27:27
- * TODO
  */
 public class DSAOPExample {
 	public static void main(String[] args) throws Exception {

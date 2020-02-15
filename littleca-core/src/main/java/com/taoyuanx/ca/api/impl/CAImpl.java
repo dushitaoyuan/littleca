@@ -9,7 +9,8 @@ import java.security.Security;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Date;
-
+import com.taoyuanx.ca.bc.ProviderInstance;
+import com.taoyuanx.ca.util.CertUtil;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
@@ -20,14 +21,11 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 
 import com.taoyuanx.ca.api.ICA;
 import com.taoyuanx.ca.exception.CertException;
-import com.taoyuanx.ca.openssl.ProviderInstance;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.util.Util;
 
 /**
  * @author 都市桃源
  * 2018年6月17日下午4:52:25
- * TODO 
  * 证书操作 实现
  */
 public class CAImpl implements ICA {

@@ -62,7 +62,6 @@ public final class Validator {
 	/**
 	 * 判断空
 	 * 
-	 * @param str
 	 * @param msg
 	 * @return
 	 * @throws ValidatorException
@@ -83,7 +82,6 @@ public final class Validator {
 	/**
 	 * 两个字符串是否相等
 	 * 
-	 * @param str
 	 * @param str2
 	 * @param msg
 	 * @return

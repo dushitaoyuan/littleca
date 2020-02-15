@@ -30,11 +30,23 @@ public class LittleTsaClientImpl implements TsaClient {
     private OkHttpClient client;
     private boolean isBase64;
 
+    private String username;
+    private String password;
+    private boolean usernameEnabled;
+
     public LittleTsaClientImpl(String encoding, String tsaUrl, OkHttpClient client) {
         this.isBase64 = TsaTranserConstant.isBase64(encoding);
         this.dataType = isBase64 ? TsaTranserConstant.TRANSFER_ENCODING_BASE64 : TsaTranserConstant.TRANSFER_ENCODING_BINARY;
         this.tsaUrl = tsaUrl;
         this.client = client;
+
+    }
+
+    public LittleTsaClientImpl(String encoding, String tsaUrl, OkHttpClient client, String username, String password) {
+        this(encoding, tsaUrl, client);
+        this.usernameEnabled = true;
+        this.username = username;
+        this.password = password;
 
     }
 
@@ -49,17 +61,19 @@ public class LittleTsaClientImpl implements TsaClient {
             TimeStampRequestGenerator tsqGenerator = new TimeStampRequestGenerator();
             tsqGenerator.setCertReq(true);
             BigInteger nonce = BigInteger.valueOf(System.currentTimeMillis());
-
-            TimeStampRequest timeStampRequest = tsqGenerator.generate( TSPAlgorithms.SHA256, messageDigest, nonce);
+            TimeStampRequest timeStampRequest = tsqGenerator.generate(TSPAlgorithms.SHA256, messageDigest);
             byte[] requestBytes = timeStampRequest.getEncoded();
             if (isBase64) {
                 requestBytes = Base64.encodeBase64(requestBytes);
             }
-            Request timeStampOkHttpRequest = new Request.Builder().addHeader("Content-Type", TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE)
+            Request.Builder builder = new Request.Builder().addHeader("Content-Type", TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE)
                     .addHeader(TsaTranserConstant.TRANSFER_ENCODING_HEADER, dataType).url(tsaUrl)
-                    .post(RequestBody.create(requestBytes)).build();
+                    .post(RequestBody.create(requestBytes));
+            if (usernameEnabled) {
+                builder.addHeader("username", username).addHeader("password", password);
+            }
+            Request timeStampOkHttpRequest = builder.build();
             response = client.newCall(timeStampOkHttpRequest).execute();
-
             if (response.isSuccessful()) {
                 byte[] timeStampResponse = response.body().bytes();
                 if (isBase64) {
@@ -67,7 +81,6 @@ public class LittleTsaClientImpl implements TsaClient {
                 }
                 return new TimeStampResponse(timeStampResponse);
             }
-
             throw new LittleTsaException("little tsa call failed, result" + response.body().string());
         } catch (Exception e) {
             LOG.error("little tsa exception {}", e);

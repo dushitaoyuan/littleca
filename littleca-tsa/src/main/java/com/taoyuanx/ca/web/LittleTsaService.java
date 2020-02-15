@@ -1,5 +1,6 @@
 package com.taoyuanx.ca.web;
 
+import com.taoyuanx.ca.config.LittleTsaConfig;
 import com.taoyuanx.ca.tsa.TsaTranserConstant;
 import com.taoyuanx.ca.tsa.TimeStampService;
 import org.apache.commons.io.IOUtils;
@@ -30,14 +31,26 @@ public class LittleTsaService {
 
     @Autowired
     TimeStampService timeStampService;
+    @Autowired
+    LittleTsaConfig littleTsaConfig;
 
-    @RequestMapping(value = "tsa",method = RequestMethod.POST)
+    @RequestMapping(value = "tsa", method = RequestMethod.POST)
     public void tsa(HttpServletRequest req, HttpServletResponse resp) {
         String remoteIp = req.getRemoteAddr();
         try {
             if (!TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE.equalsIgnoreCase(req.getContentType())) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "content type should be " + TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE);
                 return;
+            }
+            if (!TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE.equalsIgnoreCase(req.getContentType())) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "content type should be " + TsaTranserConstant.TIMESTAMP_QUERY_CONTENT_TYPE);
+                return;
+            }
+            if (littleTsaConfig.isUsernameEnabled()) {
+                if (!littleTsaConfig.getTsaUsername().equals(req.getHeader("username")) || !littleTsaConfig.getTsaPassword().equals(req.getHeader("password"))) {
+                    resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "username and password must match");
+                    return;
+                }
             }
             if (req.getContentLength() == 0) {
                 LOG.error("timestamp request is empty");
@@ -95,7 +108,6 @@ public class LittleTsaService {
             return new TimeStampRequest(requestBytes);
         }
     }
-
 
 
 }

@@ -10,20 +10,18 @@ import java.security.Security;
 import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
-
+import com.taoyuanx.ca.bc.ProviderInstance;
+import com.taoyuanx.ca.util.CertUtil;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.taoyuanx.ca.api.ICA;
 import com.taoyuanx.ca.api.impl.CAImpl;
-import com.taoyuanx.ca.openssl.ProviderInstance;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 
 
 /**
  * @author 都市桃源
  * 2018年6月23日下午8:25:17
  * dsa CA example 
- * TODO
  */
 public class DSACATestExample {
 	//存储基础目录
@@ -110,7 +108,6 @@ public class DSACATestExample {
 	 * @param CACert
 	 * @param privateKey
 	 * @param userDN
-	 * @param issuerDN
 	 * @throws Exception
 	 */
 	public static void testDSA(X509Certificate CACert, PrivateKey privateKey,String userDN) throws Exception {

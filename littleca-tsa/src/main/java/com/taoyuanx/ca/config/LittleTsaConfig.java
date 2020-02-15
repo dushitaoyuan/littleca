@@ -1,12 +1,13 @@
 package com.taoyuanx.ca.config;
 
-import com.taoyuanx.ca.openssl.cert.CertUtil;
+import com.taoyuanx.ca.util.CertUtil;
 import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.asn1.x509.KeyPurposeId;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -41,6 +42,12 @@ public class LittleTsaConfig implements ApplicationRunner {
     private String keystoreCertAlias;
     private String tsaUsername;
     private String tsaPassword;
+    private boolean usernameEnabled;
+
+
+    public boolean isUsernameEnabled() {
+        return usernameEnabled;
+    }
 
     public String getCertKeystorePath() {
         return certKeystorePath;
@@ -102,6 +109,7 @@ public class LittleTsaConfig implements ApplicationRunner {
         x509Certificate = (X509Certificate) keyStore.getCertificate(keystoreCertAlias);
         checkTsaCert(x509Certificate);
         privateKey = CertUtil.getPrivateKey(keyStore,keystorePassword, keystoreAlias);
+        usernameEnabled= StringUtils.hasText(tsaUsername)&&StringUtils.hasText(tsaPassword);
     }
 
     private void checkTsaCert(X509Certificate x509Certificate) throws Exception {

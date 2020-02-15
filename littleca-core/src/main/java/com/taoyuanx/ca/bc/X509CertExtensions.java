@@ -1,21 +1,14 @@
-package com.taoyuanx.ca.openssl.cert;
+package com.taoyuanx.ca.bc;
+
+import org.bouncycastle.asn1.ASN1Encodable;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.bouncycastle.asn1.ASN1Encodable;
-import org.bouncycastle.asn1.ASN1EncodableVector;
-import org.bouncycastle.asn1.x509.BasicConstraints;
-import org.bouncycastle.asn1.x509.CRLDistPoint;
-import org.bouncycastle.asn1.x509.ExtendedKeyUsage;
-import org.bouncycastle.asn1.x509.Extension;
-import org.bouncycastle.asn1.x509.GeneralName;
-import org.bouncycastle.asn1.x509.GeneralNames;
-import org.bouncycastle.asn1.x509.KeyPurposeId;
-import org.bouncycastle.asn1.x509.KeyUsage;
-import org.bouncycastle.cert.X509v3CertificateBuilder;
-import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 
 /**
  * 
@@ -111,7 +104,7 @@ public class X509CertExtensions {
 		certBuilder.addExtension(Extension.extendedKeyUsage, true, X509CertExtensions.builldExtendKeyUsage());
 		// 主题备用名称扩展
 		/*certBuilder.addExtension(Extension.issuerAlternativeName, true, X509CertExtensions
-				.buildSubjectAlternativeName(new GeneralName(GeneralName.rfc822Name, "lianglei_lzx@163.com")));*/
+				.buildSubjectAlternativeName(new GeneralName(GeneralName.rfc822Name, "email@163.com")));*/
 		// 基本约束
 		if (userPublicKey == caPublicKey) {
 			certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(3));

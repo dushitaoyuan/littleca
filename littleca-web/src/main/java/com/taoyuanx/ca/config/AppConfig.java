@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.taoyuanx.ca.util.CertUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -15,7 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.taoyuanx.ca.exception.CertException;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.common.CAConstant.KeyType;
 import com.taoyuanx.ca.util.SimpleTokenManager;
 

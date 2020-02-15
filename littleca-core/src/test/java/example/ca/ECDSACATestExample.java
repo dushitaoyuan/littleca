@@ -11,19 +11,18 @@ import java.security.cert.X509Certificate;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.taoyuanx.ca.util.CertUtil;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.taoyuanx.ca.api.ICA;
 import com.taoyuanx.ca.api.impl.CAImpl;
-import com.taoyuanx.ca.openssl.ProviderInstance;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
+import com.taoyuanx.ca.bc.ProviderInstance;
 
 
 /**
  * @author 都市桃源
  * 2018年6月23日下午8:25:17
  * ecdsa CA example 
- * TODO
  */
 public class ECDSACATestExample {
 	//存储基础目录

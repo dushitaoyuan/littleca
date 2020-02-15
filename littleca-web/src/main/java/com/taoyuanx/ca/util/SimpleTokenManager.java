@@ -80,14 +80,5 @@ public class SimpleTokenManager {
 		return buf.substring(0, buf.length()-1);
 		
 	}
-	public static void main(String[] args) throws SecurityException {
-		SimpleTokenManager tokenManager=new SimpleTokenManager("1Q2yUHaj");
-		Map<String,String> map=new HashMap<String, String>(16);
-		map.put("123", "123");
-		String createToken = tokenManager.createToken(map, 30L, TimeUnit.MINUTES);
-		System.out.println(createToken);
-		Map<String, String> vafy = tokenManager.vafy(createToken);
-		System.out.println(vafy);
-		
-	}
+
 }

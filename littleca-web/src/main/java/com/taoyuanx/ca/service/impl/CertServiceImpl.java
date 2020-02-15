@@ -7,10 +7,10 @@ import java.security.cert.X509Certificate;
 
 import com.taoyuanx.ca.config.AppConfig;
 import com.taoyuanx.ca.config.CaConfig;
+import com.taoyuanx.ca.util.CertUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.common.CAConstant.KeyType;
 import com.taoyuanx.ca.dto.CertReq;
 import com.taoyuanx.ca.dto.CertResult;

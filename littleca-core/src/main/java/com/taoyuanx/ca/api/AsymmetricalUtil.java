@@ -3,7 +3,6 @@ package com.taoyuanx.ca.api;
  * cipherUtil 
  * @author 都市桃源
  * 2018年7月1日下午10:42:42
- * TODO
  */
 
 import java.security.Security;
@@ -13,7 +12,7 @@ import javax.crypto.Cipher;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.taoyuanx.ca.openssl.ProviderInstance;
+import com.taoyuanx.ca.bc.ProviderInstance;
 
 public class AsymmetricalUtil {
 	static {

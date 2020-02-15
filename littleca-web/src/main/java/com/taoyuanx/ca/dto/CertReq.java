@@ -11,8 +11,8 @@ public class CertReq {
 	 * C 国家代码
 	 * ST 省份
 	 * L 城市
-	 * O 组织 
-	 * OU 单位  
+	 * O 组织
+	 * OU 单位
 	 * CN 用户名(可以为域名)（example:*.baidu.com）
 	 * E 邮箱
 	 * notBefore 证书生效时间
@@ -49,7 +49,7 @@ public class CertReq {
 
 
 
-	
+
 	public String getE() {
 		return E;
 	}
@@ -80,7 +80,7 @@ public class CertReq {
 	public void setL(String l) {
 		L = l;
 	}
-	
+
 	public String getST() {
 		return ST;
 	}
@@ -120,7 +120,7 @@ public class CertReq {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-	
+
 	public String getUserDN(){
 	//	"C=CN,ST=BJ,L=BJ,O=taoyuanx-client,OU=taoyuanx-client,CN=*.taoyuanx.com,E=xx@xx.com";
 		StringBuilder buf=new StringBuilder();
@@ -150,5 +150,5 @@ public class CertReq {
 	public void setKeySize(String keySize) {
 		this.keySize = keySize;
 	}
-	
+
 }

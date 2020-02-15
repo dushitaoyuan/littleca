@@ -2,7 +2,6 @@ package com.taoyuanx.ca.controller;
 
 import cn.hutool.core.util.ZipUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.anno.NeedToken;
 import com.taoyuanx.ca.common.CAConstant.KeyType;
 import com.taoyuanx.ca.common.Result;
@@ -13,6 +12,7 @@ import com.taoyuanx.ca.dto.CertReq;
 import com.taoyuanx.ca.dto.CertResult;
 import com.taoyuanx.ca.dto.KeyPairResult;
 import com.taoyuanx.ca.service.CertService;
+import com.taoyuanx.ca.util.CertUtil;
 import com.taoyuanx.ca.util.SimpleTokenManager;
 import com.taoyuanx.ca.util.Validator;
 import org.apache.commons.io.FileUtils;

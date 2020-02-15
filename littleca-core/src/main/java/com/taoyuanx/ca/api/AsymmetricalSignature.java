@@ -7,7 +7,6 @@ import java.security.PublicKey;
  * 非对称签名,验签
  * @author 都市桃源
  * 2018年7月2日下午10:27:38
- * TODO
  */
 public interface AsymmetricalSignature {
 	/**

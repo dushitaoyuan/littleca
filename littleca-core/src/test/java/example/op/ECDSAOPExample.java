@@ -8,14 +8,13 @@ import java.util.Random;
 import com.taoyuanx.ca.api.AsymmetricalCipher;
 import com.taoyuanx.ca.api.AsymmetricalSignature;
 import com.taoyuanx.ca.api.impl.ECDSA;
-import com.taoyuanx.ca.openssl.cert.CertUtil;
 import com.taoyuanx.ca.util.ByteStringUtil;
+import com.taoyuanx.ca.util.CertUtil;
 
 /**
  * ecdsa 操作示例
  * @author 都市桃源
  * 2018年7月1日下午11:27:27
- * TODO
  */
 public class ECDSAOPExample {
 	//KeyPairGeneratorSpi
