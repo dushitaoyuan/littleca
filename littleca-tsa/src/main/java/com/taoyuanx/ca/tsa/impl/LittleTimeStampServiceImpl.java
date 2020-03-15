@@ -1,8 +1,8 @@
 package com.taoyuanx.ca.tsa.impl;
 
-import com.taoyuanx.ca.bc.ProviderInstance;
-import com.taoyuanx.ca.config.LittleTsaConfig;
-import com.taoyuanx.ca.ex.LittleTsaException;
+import com.taoyuanx.ca.core.bc.ProviderInstance;
+import com.taoyuanx.ca.tsa.config.LittleTsaConfig;
+import com.taoyuanx.ca.tsa.ex.LittleTsaException;
 import com.taoyuanx.ca.tsa.TimeStampService;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.cms.Attribute;

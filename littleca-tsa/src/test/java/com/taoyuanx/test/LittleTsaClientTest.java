@@ -1,27 +1,18 @@
 package com.taoyuanx.test;
 
-import com.taoyuanx.ca.AppServerApplication;
-import com.taoyuanx.ca.config.LittleTsaConfig;
-import com.taoyuanx.ca.ex.LittleTsaException;
+
+import com.taoyuanx.ca.tsa.LittleTsaBootApplication;
 import com.taoyuanx.ca.tsa.TimeStampService;
 import com.taoyuanx.ca.tsa.TsaTranserConstant;
 import com.taoyuanx.ca.tsa.client.TsaClient;
 import com.taoyuanx.ca.tsa.client.impl.LittleTsaClientImpl;
+import com.taoyuanx.ca.tsa.config.LittleTsaConfig;
 import okhttp3.OkHttpClient;
-import org.bouncycastle.asn1.*;
-import org.bouncycastle.asn1.cms.Attribute;
-import org.bouncycastle.asn1.cms.AttributeTable;
-import org.bouncycastle.asn1.cms.CMSAttributes;
-import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
-import org.bouncycastle.cms.DefaultSignedAttributeTableGenerator;
-import org.bouncycastle.cms.SignerInfoGenerator;
-import org.bouncycastle.cms.SimpleAttributeTableGenerator;
-import org.bouncycastle.cms.jcajce.JcaSignerInfoGeneratorBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.operator.*;
-import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.bouncycastle.operator.jcajce.JcaDigestCalculatorProviderBuilder;
-import org.bouncycastle.tsp.*;
+import org.bouncycastle.tsp.TSPAlgorithms;
+import org.bouncycastle.tsp.TimeStampRequest;
+import org.bouncycastle.tsp.TimeStampRequestGenerator;
+import org.bouncycastle.tsp.TimeStampResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,10 +22,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.security.Security;
-import java.util.Date;
-import java.util.Hashtable;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -43,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @date 2019/7/10
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = AppServerApplication.class)
+@SpringBootTest(classes = LittleTsaBootApplication.class)
 public class LittleTsaClientTest {
     private TsaClient tsaClient;
     @Autowired

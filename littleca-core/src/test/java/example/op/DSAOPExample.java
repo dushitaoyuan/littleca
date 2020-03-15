@@ -5,10 +5,10 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.util.Random;
 
-import com.taoyuanx.ca.api.AsymmetricalSignature;
-import com.taoyuanx.ca.api.impl.DSA;
-import com.taoyuanx.ca.util.ByteStringUtil;
-import com.taoyuanx.ca.util.CertUtil;
+import com.taoyuanx.ca.core.api.AsymmetricalSignature;
+import com.taoyuanx.ca.core.api.impl.DSA;
+import com.taoyuanx.ca.core.util.ByteStringUtil;
+import com.taoyuanx.ca.core.util.CertUtil;
 
 /**
  * rsa 操作示例

@@ -1,7 +1,7 @@
 package example.op;
 
-import com.taoyuanx.ca.sm.util.Sm4Util;
-import com.taoyuanx.ca.util.ByteStringUtil;
+import com.taoyuanx.ca.core.sm.util.Sm4Util;
+import com.taoyuanx.ca.core.util.ByteStringUtil;
 
 public class SM4Example {
 	public static void main(String[] args) throws Exception {

@@ -1,7 +1,5 @@
 package com.taoyuanx.ca.tsa.client;
 
-import org.bouncycastle.tsp.TSPException;
-import org.bouncycastle.tsp.TimeStampRequest;
 import org.bouncycastle.tsp.TimeStampResponse;
 
 /**
@@ -16,5 +14,5 @@ public interface TsaClient {
      * @param messageDigest 数据摘要
      * @return
      */
-    TimeStampResponse timestamp( String signAlg,byte[] messageDigest);
+    TimeStampResponse timestamp(String signAlg, byte[] messageDigest);
 }

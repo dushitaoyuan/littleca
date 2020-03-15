@@ -1,9 +1,12 @@
 package com.taoyuanx.ca.tsa.client.impl;
 
+import com.taoyuanx.ca.tsa.ex.LittleTsaException;
 import com.taoyuanx.ca.tsa.TsaTranserConstant;
-import com.taoyuanx.ca.ex.LittleTsaException;
 import com.taoyuanx.ca.tsa.client.TsaClient;
-import okhttp3.*;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.asn1.x509.AlgorithmIdentifier;
 import org.bouncycastle.operator.DefaultDigestAlgorithmIdentifierFinder;
