@@ -4,7 +4,7 @@
 littleca是一个基于BC的小型ca库,支持ecc,rsa,dsa,sm2的证书签发,加密,解密,签名,验签操作
 对openssl友好,支持openssl的pem文件
 littleca-core 提供基本操作  
-littleca-web 提供界面操作 x509v3 cer证书颁发,个人证书p12颁发,pkcs#8 公私钥文件生成  
+littleca-ui 提供界面操作 x509v3 cer证书颁发,个人证书p12颁发,pkcs#8 公私钥文件生成  
 littleca-tsa 时间戳服务
 
 [little-auth](little-auth/little-auth.md) 基于littleca的认证服务

@@ -1,0 +1,15 @@
+.site-title{margin: 30px 0 20px; }
+.site-title fieldset{border: none; padding: 0; border-top: 1px solid #eee;}
+.site-title fieldset legend{margin-left: 20px;  padding: 0 10px; font-size: 22px; font-weight: 300;}
+.pri-container,.pub-container{
+	width:600px;
+	float:  left;
+}
+.pub-container{
+	margin-left: 50px;
+}
+.layui-code{
+	min-height:700px;
+}
+
+

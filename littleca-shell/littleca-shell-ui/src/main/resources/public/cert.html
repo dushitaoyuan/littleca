@@ -1,0 +1,169 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>littleca-shell-ui</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script src="/js/web-storage-cache.min.js"></script>
+    <script src="/js/qs.js"></script>
+
+    <script src="/js/common.js"></script>
+</head>
+<style type="text/css">
+    .el-header, .el-footer {
+        background-color: #fff;
+        color: #273849;
+        font-weight: bolder;
+        text-align: center;
+        line-height: 60px;
+    }
+
+    .el-main {
+        background-color: #fff;
+        color: #273849;
+        text-align: center;
+        line-height: 160px;
+        width: 800px;
+        margin: 0 auto;
+    }
+
+    body > .el-container {
+        margin-bottom: 40px;
+    }
+
+
+</style>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>littleca</el-header>
+        <el-main>
+            <el-form id="certForm" :rules="rules" ref="certForm" :model="certForm" label-width="180px">
+                <el-form-item label="国家代码(例如:中国CN)" prop="subject.C" required>
+                    <el-input v-model="certForm.subject.C"></el-input>
+                </el-form-item>
+                <el-form-item label="省份(例如:北京BJ)" prop="subject.ST" required>
+                    <el-input v-model="certForm.subject.ST"></el-input>
+                </el-form-item>
+                <el-form-item label="城市(例如:北京BJ)" prop="subject.L" required>
+                    <el-input v-model="certForm.subject.L"></el-input>
+                </el-form-item>
+                <el-form-item label="组织(例如:baidu)" prop="subject.O" required>
+                    <el-input v-model="certForm.subject.O"></el-input>
+                </el-form-item>
+                <el-form-item label="单位(例如:baidu)" prop="subject.OU" required>
+                    <el-input v-model="certForm.subject.OU"></el-input>
+                </el-form-item>
+                <el-form-item label="域名(例如:*.baidu.com)" prop="subject.CN" required>
+                    <el-input v-model="certForm.subject.CN"></el-input>
+                </el-form-item>
+                <el-form-item label="RSA位数" prop="keySize" required>
+                    <el-select v-model="certForm.keySize" placeholder="请RSA位数">
+                        <el-option label="1024" value="1024"></el-option>
+                        <el-option label="2048" value="2048"></el-option>
+                        <el-option label="4096" value="4096"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="证书有效期天数">
+                    <el-input v-model="certForm.certExpireDay"></el-input>
+                </el-form-item>
+                <el-form-item label="证书pcks12密码" prop="certPassword" required>
+                    <el-input type="password" v-model="certForm.certPassword"></el-input>
+                </el-form-item>
+                <el-form-item>
+                    <el-button type="primary" @click="createCert('certForm')">生成</el-button>
+                    <el-button @click="resetForm('certForm')">重置</el-button>
+                    <el-button type="success" v-if="download" @click="downLoad()">生成完毕下载</el-button>
+                </el-form-item>
+            </el-form>
+        </el-main>
+        <el-footer>by dushitaoyuan</el-footer>
+    </el-container>
+</div>
+</body>
+
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            certForm: {
+                subject: {
+                    C: 'CN',
+                    ST: '',
+                    L: '',
+                    O: '',
+                    OU: '',
+                    CN: ''
+                },
+                certExpireDay: 365,
+                certPassword: '123456',
+                keySize: 1024
+            },
+            download: false,
+            downloadId: '',
+            rules: {
+                subject: {
+                    C: [
+                        {required: true, message: '请输入国家代码'},
+                        {min: 1, max: 10, message: '长度在 1 到  10 个字符'}
+                    ],
+                    ST: [
+                        {required: true, message: '请输入省份代码'},
+                        {min: 1, max: 10, message: '长度在 1 到  10 个字符'}
+                    ],
+                    L: [
+                        {required: true, message: '请输入城市代码'},
+                        {min: 1, max: 10, message: '长度在 1 到  10 个字符'}
+                    ],
+                    O: [
+                        {required: true, message: '请输入组织代码'}
+                    ],
+                    OU: [
+                        {required: true, message: '请输入单位代码'}
+                    ],
+                    CN: [
+                        {required: true, message: '请输入域名代码'},
+                        {min: 3, max: 30, message: '长度在 3 到  30 个字符'}
+                    ]
+                },
+                certPassword: [
+                    {required: true, message: '请输入证书证书密码'},
+                    {min: 4, max: 10, message: '长度在 4 到  10 个字符'}
+                ]
+            }
+        },
+        methods: {
+            createCert(formName) {
+                var _this = this;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        myAxios.post("/cert", _this.certForm, function (result) {
+                            _this.download = true;
+                            _this.downloadId = result.msg;
+                        });
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            },
+            downLoad() {
+                if (this.download) {
+                    window.open('/api/downCertZip?serialNumber=' + this.downloadId + '&password=' + this.certPassword);
+                }
+            }
+        }
+    });
+
+
+</script>
+
+</html>

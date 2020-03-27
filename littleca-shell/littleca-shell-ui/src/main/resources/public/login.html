@@ -1,0 +1,105 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <title>littleca-shell-ui</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/web-storage-cache.min.js"></script>
+    <script src="/js/qs.js"></script>
+    <script src="/js/common.js"></script>
+</head>
+<style type="text/css">
+    .el-header, .el-footer {
+        background-color: #fff;
+        color: #273849;
+        font-weight: bolder;
+        text-align: center;
+        line-height: 60px;
+    }
+
+    .el-main {
+        background-color: #fff;
+        color: #273849;
+        text-align: center;
+        line-height: 160px;
+        width: 800px;
+        margin: 0 auto;
+    }
+
+    body > .el-container {
+        margin-bottom: 40px;
+    }
+
+
+</style>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>littleca-login</el-header>
+        <el-main>
+            <el-form id="loginForm" :rules="rules" ref="loginForm" :model="loginForm" label-width="180px">
+                <el-form-item label="账户" prop="username" required>
+                    <el-input v-model="loginForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password" required>
+                    <el-input type="password" v-model="loginForm.password"></el-input>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="login('loginForm')">登录</el-button>
+                    <el-button @click="resetForm('loginForm')">重置</el-button>
+                </el-form-item>
+            </el-form>
+        </el-main>
+        <el-footer>by dushitaoyuan</el-footer>
+    </el-container>
+</div>
+</body>
+
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            loginForm: {
+                username: 'dushitaoyuan',
+                password: '123456',
+            },
+            rules: {
+                username: [
+                    {required: true, message: '请输入用户名'}
+                ],
+                password: [
+                    {required: true, message: '请输入密码'}
+                ]
+            }
+        },
+        methods: {
+            login(formName) {
+                var _this = this;
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        myAxios.post("/login", _this.loginForm, function (result) {
+                            var data = result.info;
+                            webCache.set('token',data.token,{exp:1800});
+                            webCache.set('username',data.username,{exp:1800});
+                        });
+                    }
+                });
+            },
+            resetForm(formName) {
+                this.$refs[formName].resetFields();
+            }
+        }
+    });
+
+
+</script>
+
+</html>
