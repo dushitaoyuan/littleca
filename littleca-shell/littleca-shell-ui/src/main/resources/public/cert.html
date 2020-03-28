@@ -170,7 +170,12 @@
             },
             downLoad() {
                 if (this.download) {
-                    window.open('/api/downCertZip?serialNumber=' + this.downloadId + '&password=' + this.certForm.certPassword);
+                    var queryParams = {
+                        serialNumber: this.downloadId,
+                        password: this.certForm.certPassword,
+                        token: getToken()
+                    }
+                    window.open('/api/downCertZip?'+Qs.stringify(queryParams));
                 }
             }
         }
