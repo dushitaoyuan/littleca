@@ -9,7 +9,7 @@ littleca-shel-ui :
 1. 目前只支持rsa
 2. 修改脚本可支持更多算法
 3. shell无交互设计,参数由上层应用封装
-### opensll 配置设置
+### openssl 配置设置
 
 1. 准备
 ```shell
