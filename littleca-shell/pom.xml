@@ -11,7 +11,7 @@
     </parent>
     <artifactId>littleca-shell</artifactId>
     <packaging>pom</packaging>
-      <modules>
+    <modules>
         <module>littleca-shell-core</module>
         <module>littleca-shell-ui</module>
     </modules>

@@ -78,15 +78,13 @@ public class ApiController {
      * @throws Exception
      */
     @RequestMapping(value = "cert", method = RequestMethod.POST)
-    @NeedToken(isNeed = false)
     public Result<JSONObject> cert(@RequestBody CertReq certReq) throws Exception {
         String serialNumber = System.currentTimeMillis() + "";
         shellExecutor.execute(newShellParam(certReq, serialNumber));
-        return ResultBuilder.buildOkResult(serialNumber);
+        return ResultBuilder.buildOkStringResult(serialNumber);
     }
 
     @RequestMapping(value = "downCertZip", method = RequestMethod.GET)
-    @NeedToken(isNeed = false)
     public void downCertZip(String serialNumber, String password, HttpServletResponse resp, HttpServletRequest req) throws SerialException {
         try {
             File zipFile = new File(appConfig.getCertBaseDir(), Math.abs(HashUtil.bkdrHash(serialNumber)) + "_cert.zip");

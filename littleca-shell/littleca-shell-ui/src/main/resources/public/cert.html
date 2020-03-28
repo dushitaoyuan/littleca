@@ -145,9 +145,22 @@
                 var _this = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        myAxios.post("/cert", _this.certForm, function (result) {
-                            _this.download = true;
-                            _this.downloadId = result.msg;
+                        myAxios.post("/cert", _this.certForm, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(function (response) {
+                            if (isSuccess(response.data)) {
+                                _this.download = true;
+                                _this.downloadId = response.data.info;
+                                app.$message({
+                                    message: '生成成功,可打包下载证书!',
+                                    type: 'success'
+                                });
+                            } else {
+                                commonError(response.data.msg);
+                            }
+
                         });
                     }
                 });
@@ -157,7 +170,7 @@
             },
             downLoad() {
                 if (this.download) {
-                    window.open('/api/downCertZip?serialNumber=' + this.downloadId + '&password=' + this.certPassword);
+                    window.open('/api/downCertZip?serialNumber=' + this.downloadId + '&password=' + this.certForm.certPassword);
                 }
             }
         }

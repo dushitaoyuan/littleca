@@ -85,10 +85,20 @@
                 var _this = this;
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        myAxios.post("/login", _this.loginForm, function (result) {
-                            var data = result.info;
-                            webCache.set('token',data.token,{exp:1800});
-                            webCache.set('username',data.username,{exp:1800});
+                        myAxios.post("/login", _this.loginForm, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        }).then(function (response) {
+                            if (isSuccess(response.data)) {
+                                let data = response.data.info;
+                                webCache.set('token', data.token, {exp: 1800});
+                                webCache.set('username', data.username, {exp: 1800});
+                                window.location.href='cert.html'
+                            } else {
+                                commonError(response.data.msg);
+                            }
+
                         });
                     }
                 });

@@ -1,5 +1,7 @@
 package com.taoyuanx.ca.shellui.anno;
 
+import org.springframework.http.HttpStatus;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -44,7 +44,7 @@ if  %functionName% == java_create (
 
   
 
-pause
+::  pause
 
 
 exit
