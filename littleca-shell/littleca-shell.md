@@ -2,7 +2,7 @@
 
 ## 项目介绍
 littleca-shell-core:  
- 基于openssl 和keytool的证书生成工具包
+ 基于openssl 和keytool的证书生成工具包  
 littleca-shel-ui :  
     配套界面  
 
