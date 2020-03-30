@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -57,6 +58,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(tokenInterceptor).addPathPatterns("/**").excludePathPatterns("/error", "/page");
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        String index="login.html";
+        registry.addRedirectViewController("",index);
+        registry.addRedirectViewController("index",index);
+        registry.addRedirectViewController("/",index);
+
     }
 
     //统一异常处理

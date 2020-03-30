@@ -12,7 +12,7 @@ const myAxios = axios.create({
             }
             //form处理
             if (requestType.indexOf('x-www-form-urlencoded') > 0) {
-                return Qs.stringify(data, {arrayFormat: 'brackets'});
+                return Qs.stringify(data, {arrayFormat: 'repeat'});
             }
         }
         //其他
@@ -26,7 +26,7 @@ myAxios.interceptors.request.use(
     function (config) {
         if (config.url.indexOf("login") == -1) {
             let token = getToken();
-            if(token){
+            if (token) {
                 config.headers['token'] = getToken()
             }
         }
@@ -48,7 +48,7 @@ myAxios.interceptors.response.use(
         if (error && !isSuccess(error.response.data)) {
             var errorData = response.data
             console.error("error code \t" + errorData.code + "\t error msg" + errorData.msg);
-            switch (data.status == 0) {
+            switch (errorData.code) {
                 default:
                     commonError(errorData.msg);
                     break;
