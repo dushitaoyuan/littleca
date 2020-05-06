@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="10 seconds">
     <springProperty name="LOG_HOME" source="logging.path" defaultValue="./logs"/>
-    <springProperty name="LOG_PREFIX" source="spring.application.name" defaultValue="littleca-ui"/>
+    <springProperty name="LOG_PREFIX" source="spring.application.name" defaultValue="littleca-shell-ui"/>
 
     <conversionRule conversionWord="clr" converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
     <conversionRule conversionWord="wex"

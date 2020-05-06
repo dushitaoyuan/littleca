@@ -19,14 +19,14 @@ public class ShellTest {
     @Before
     public void shellParam() {
         this.shellParam = new ShellParam();
-        shellParam.setShellPath("G:\\openssl\\cert_shell_auto.bat");
+        shellParam.setShellPath("D:\\soft\\OpenSSL-Win64\\myca\\cert_shell_auto.bat");
         shellParam.setCertPassword("123456");
         CertSubject certSubject = new CertSubject("CN", "BJ", "BJ", "taoyuanx.com",
                 "taoyuanx.com", "*.taoyuanx.com");
         shellParam.setCertSubect(certSubject);
-        shellParam.setOpensslConfPath("g:\\openssl\\ca\\openssl.cnf");
-        shellParam.setOpensslCaPrivateKeyPath("g:\\openssl\\ca\\cacert.pem");
-        shellParam.setCreateCertDir("g:\\openssl\\myclient");
+        shellParam.setOpensslConfPath("D:\\soft\\OpenSSL-Win64\\myca\\openssl.cfg");
+        shellParam.setOpensslCaPrivateKeyPath("D:\\soft\\OpenSSL-Win64\\myca\\cacert.pem");
+        shellParam.setCreateCertDir("D:\\soft\\OpenSSL-Win64\\myca\\myclient");
         shellParam.setShellType(ShellType.OPENSSL_WINDOWS);
     }
 
