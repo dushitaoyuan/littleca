@@ -79,12 +79,15 @@ public class CertUtil {
             throw new CertException("read x509 cert failed", e);
         }
     }
+
     public static final String CERT_TYPE_X509 = "X.509";
+
     public static X509Certificate getPublicKeyCer(InputStream publicInput) throws Exception {
         CertificateFactory certificatefactory = CertificateFactory.getInstance(CERT_TYPE_X509);
         X509Certificate cert = (X509Certificate) certificatefactory.generateCertificate(publicInput);
         return cert;
     }
+
     /**
      * 保存公钥证书 base64编码
      *
@@ -160,12 +163,21 @@ public class CertUtil {
      * @param pemPath
      * @return
      */
-    public static PublicKey readPublicKeyPem(String publicKeyPath) throws CertException {
+    public static PublicKey readPublicKeyPem(String publicKeyPath) throws CertException, IOException {
+        if (null == publicKeyPath) {
+            throw new CertException("publicKeyPath can't be null");
+        }
+        return readPublicKeyPem(new FileReader(publicKeyPath));
+    }
+    public static PublicKey readPublicKeyPemString(String pemString) throws CertException {
+        if (null == pemString) {
+            throw new CertException("pemString can't be null");
+        }
+        return readPublicKeyPem(new StringReader(pemString));
+    }
+    public static PublicKey readPublicKeyPem(Reader reader) throws CertException {
         try {
-            if (null == publicKeyPath) {
-                throw new CertException("publicKeyPath can't be null");
-            }
-            PEMParser pemParser = new PEMParser(new FileReader(new File(publicKeyPath)));
+            PEMParser pemParser = new PEMParser(reader);
             Object readObject = pemParser.readObject();
             if (readObject instanceof SubjectPublicKeyInfo) {
                 AsymmetricKeyParameter createKey = PublicKeyFactory.createKey((SubjectPublicKeyInfo) readObject);
@@ -191,7 +203,7 @@ public class CertUtil {
                 }
             }
             pemParser.close();
-            throw new CertException(publicKeyPath + "file read format failed");
+            throw new CertException("file read format failed");
         } catch (Exception e) {
             throw new CertException("read x509 cert failed", e);
         }
@@ -273,6 +285,7 @@ public class CertUtil {
             throw new CertException("read privateKey failed", e);
         }
     }
+
     public static PrivateKey readPrivateKeyPemString(String pemString) throws CertException {
         try {
             PEMParser pemParser = new PEMParser(new StringReader(pemString));
@@ -287,6 +300,7 @@ public class CertUtil {
             throw new CertException("read privateKey failed", e);
         }
     }
+
     /**
      * 密文pem格式私钥读取
      *
@@ -556,7 +570,8 @@ public class CertUtil {
         String rex = "-----[BEGIN[A-Z ]|END[A-Z ]]{1,}-----";
         return pemFileString.replaceAll(rex, "");
     }
-    public static PublicKey readPublicKeyPemString(String publicPemString) throws Exception {
+
+    public static PublicKey readRSAPublicKeyPemString(String publicPemString) throws Exception {
         publicPemString = filterPem(publicPemString);
         byte[] keyBytes = Base64.decodeBase64(publicPemString);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
@@ -564,6 +579,7 @@ public class CertUtil {
         PublicKey publicKey = keyFactory.generatePublic(keySpec);
         return publicKey;
     }
+
     public static PublicKey readPublicKeyCer(File fileInputStream) {
         try {
             return RSAUtil.getPublicKeyCer(new FileInputStream(fileInputStream)).getPublicKey();

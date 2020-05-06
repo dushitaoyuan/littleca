@@ -10,7 +10,6 @@ import com.taoyuanx.auth.mac.HMacAlgorithms;
 import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.sign.impl.HMacSign;
 import com.taoyuanx.auth.token.Token;
-import com.taoyuanx.ca.auth.config.AuthProperties;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
