@@ -10,12 +10,13 @@ import com.taoyuanx.auth.mac.HMacAlgorithms;
 import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.sign.impl.HMacSign;
 import com.taoyuanx.auth.token.Token;
+import com.taoyuanx.ca.auth.config.AuthProperties;
+import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import com.taoyuanx.ca.auth.service.ApiAccountService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,7 +60,7 @@ public class HmacAuthApiController {
         String apiAccount = authRequestDTO.getApiAccount();
         ApiAccountDTO apiAccountDTO = apiAccountService.getByApiAccount(apiAccount);
         apiAccountAuthHelper.checkAuthRequestSign(authRequestDTO, newSign(apiAccountDTO.getApiSecret()));
-        apiAccountAuthHelper.checkApiAccount(apiAccountDTO, ApiAccountAuthHelper.AUTH_TYPE_HMAC);
+        apiAccountAuthHelper.checkApiAccount(apiAccountDTO, AuthType.AUTH_TYPE_HMAC);
         return ResultBuilder.success(apiAccountAuthHelper.successAuth(apiAccountDTO, request));
     }
 
@@ -76,9 +77,9 @@ public class HmacAuthApiController {
         Token refreshToken = hmacTokenManager.parseToken(authRefreshRequestDTO.getRefreshToken());
         hmacTokenManager.verify(refreshToken, TokenTypeEnum.REFRESH);
         ApiAccountDTO apiAccountDTO = apiAccountService.getByApiAccount(refreshToken.getApiAccount());
-        apiAccountAuthHelper.checkApiAccount(apiAccountDTO, ApiAccountAuthHelper.AUTH_TYPE_HMAC);
+        apiAccountAuthHelper.checkApiAccount(apiAccountDTO, AuthType.AUTH_TYPE_HMAC);
         apiAccountAuthHelper.checkAuthRequestSign(authRefreshRequestDTO.getRefreshToken(), authRefreshRequestDTO.getSign(), newSign(apiAccountDTO.getApiSecret()));
-        String refreshTokenCacheKey = apiAccountAuthHelper.newRefreshTokenCacheKey(authRefreshRequestDTO.getRefreshToken());
+        String refreshTokenCacheKey = apiAccountAuthHelper.newTokenCacheKey(authRefreshRequestDTO.getRefreshToken());
         if (stringRedisTemplate.hasKey(refreshTokenCacheKey)) {
             throw new AuthException("refreshToken已失效");
         }

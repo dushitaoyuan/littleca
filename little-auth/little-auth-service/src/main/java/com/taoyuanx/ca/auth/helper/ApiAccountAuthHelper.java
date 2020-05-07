@@ -8,6 +8,7 @@ import com.taoyuanx.auth.exception.AuthException;
 import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.token.Token;
 import com.taoyuanx.auth.utils.IpWhiteCheckUtil;
+import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.utils.RequestUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
 import com.taoyuanx.ca.auth.constants.AuthCaheConstant;
@@ -32,7 +33,6 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class ApiAccountAuthHelper {
-    public static String AUTH_TYPE_RSA = "rsa", AUTH_TYPE_HMAC = "hmac";
     @Autowired
     AuthProperties authProperties;
     @Autowired
@@ -49,13 +49,13 @@ public class ApiAccountAuthHelper {
             throw new AuthException("账户不存在");
         }
         String apiAccount = apiAccountDTO.getApiAccount();
-        if (AUTH_TYPE_RSA.equals(type)) {
+        if (AuthType.AUTH_TYPE_RSA.equals(type)||AuthType.AUTH_TYPE_SM2.equals(type)) {
             String apiPub = apiAccountDTO.getApiPub();
             if (StrUtil.isEmpty(apiPub)) {
                 throw new AuthException(StrUtil.format("apiAccount[{}],暂未配置公钥", apiAccount));
             }
         }
-        if (AUTH_TYPE_HMAC.equals(type)) {
+        if (AuthType.AUTH_TYPE_HMAC.equals(type)) {
             String apiSecret = apiAccountDTO.getApiSecret();
             if (StrUtil.isEmpty(apiSecret)) {
                 throw new AuthException(StrUtil.format("apiAccount[{}],暂未配置密钥", apiAccount));
@@ -80,7 +80,6 @@ public class ApiAccountAuthHelper {
         if (endTime != null && endTime.before(now)) {
             throw new AuthException(StrUtil.format("apiAccount[{}],已到期", apiAccount));
         }
-        apiAccountDTO.readToPublicKey();
     }
 
     //请求过期时间 5分钟
@@ -139,8 +138,7 @@ public class ApiAccountAuthHelper {
         /**
          * 白名单校验
          */
-        if (authProperties.getWhiteIpCheckSwitch()) {
-
+        if (authProperties.getWhiteIpCheckSwitch() && StringUtils.isNotEmpty(apiAccountDTO.getWhiteIp())) {
             String whiteIp = apiAccountDTO.getWhiteIp();
             String remoteIp = RequestUtil.getRemoteIp(request);
             if (!IpWhiteCheckUtil.checkWhiteIP(remoteIp, whiteIp)) {
@@ -170,8 +168,13 @@ public class ApiAccountAuthHelper {
 
     }
 
-    public String newRefreshTokenCacheKey(String refreshToken) {
-        String refreshTokenCacheKey = AuthCaheConstant.API_ACCOUNT_CACHE_NAME + ":" + Hex.encodeHexString(DigestUtils.md5(refreshToken));
+    public String newTokenCacheKey(String token) {
+        String refreshTokenCacheKey = AuthCaheConstant.API_ACCOUNT_CACHE_NAME + ":" + Hex.encodeHexString(DigestUtils.md5(token));
+        return refreshTokenCacheKey;
+    }
+
+    public String newTokenCacheKeyForHash(String tokenMd5) {
+        String refreshTokenCacheKey = AuthCaheConstant.API_ACCOUNT_CACHE_NAME + ":" + tokenMd5;
         return refreshTokenCacheKey;
     }
 }

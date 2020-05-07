@@ -453,15 +453,15 @@ public class CertUtil {
 
     public static PrivateKey getPrivateKey(KeyStore keyStore, String keyPassword, String alias) throws CertException {
         try {
-            if (!keyStore.isKeyEntry(alias)) {
-                throw new CertException(alias + " alias not found");
-            }
             if (alias == null) {
                 Enumeration<String> aliases = keyStore.aliases();
                 while (aliases.hasMoreElements()) {
                     alias = aliases.nextElement();
                     break;
                 }
+            }
+            if (!keyStore.isKeyEntry(alias)) {
+                throw new CertException(alias + " alias not found");
             }
             return (PrivateKey) keyStore.getKey(alias, keyPassword.toCharArray());
         } catch (Exception e) {

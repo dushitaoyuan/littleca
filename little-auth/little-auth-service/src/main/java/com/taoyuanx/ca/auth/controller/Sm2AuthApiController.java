@@ -11,6 +11,7 @@ import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.sign.impl.Sm2Sign;
 import com.taoyuanx.auth.token.Token;
 import com.taoyuanx.auth.utils.JSONUtil;
+import com.taoyuanx.ca.auth.config.AuthProperties;
 import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
@@ -19,7 +20,6 @@ import com.taoyuanx.ca.auth.dto.EncodeRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import com.taoyuanx.ca.auth.service.ApiAccountService;
 import com.taoyuanx.ca.core.api.impl.SM2;
-import com.taoyuanx.ca.core.util.RSAUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -69,7 +68,7 @@ public class Sm2AuthApiController {
         try {
             data = new String(sm2.decrypt(Base64.decodeBase64(encodeData), sm2Config.getServerPrivateKey()), "UTF-8");
         } catch (Exception e) {
-            log.error("认证服务解密异常:[{}],加密数据:[{}]", e, encodeData);
+            log.error("认证服务解密异常:[{}],加密数据:[{}],异常信息:{}", e, encodeData, e);
             throw new AuthException("认证服务解密异常");
         }
         AuthRequestDTO authRequestDTO = JSONUtil.parseObject(data, AuthRequestDTO.class);
@@ -111,11 +110,10 @@ public class Sm2AuthApiController {
         ApiAccountDTO apiAccountDTO = apiAccountService.getByApiAccount(refreshToken.getApiAccount());
         apiAccountAuthHelper.checkApiAccount(apiAccountDTO, AuthType.AUTH_TYPE_RSA);
         apiAccountAuthHelper.checkAuthRequestSign(authRefreshRequestDTO.getRefreshToken(), authRefreshRequestDTO.getSign(), newSign(apiAccountDTO.getPublicKey()));
-        String refreshTokenCacheKey = apiAccountAuthHelper.newRefreshTokenCacheKey(authRefreshRequestDTO.getRefreshToken());
+        String refreshTokenCacheKey = apiAccountAuthHelper.newTokenCacheKey(authRefreshRequestDTO.getRefreshToken());
         if (stringRedisTemplate.hasKey(refreshTokenCacheKey)) {
             throw new AuthException("refreshToken已失效");
         }
-
         //标记
         stringRedisTemplate.opsForValue().set(refreshTokenCacheKey, "1", refreshToken.getEndTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
         //加密结果

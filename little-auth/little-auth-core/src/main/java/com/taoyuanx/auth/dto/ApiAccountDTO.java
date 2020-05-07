@@ -2,6 +2,7 @@ package com.taoyuanx.auth.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.taoyuanx.ca.core.exception.CertException;
 import com.taoyuanx.ca.core.util.CertUtil;
 import lombok.Data;
 
@@ -65,7 +66,7 @@ public class ApiAccountDTO implements Serializable {
     }
 
     @JsonIgnore
-    private RSAPublicKey publicKey;
+    private PublicKey publicKey;
 
     public PublicKey readToPublicKey() {
         if (publicKey != null) {
@@ -73,7 +74,14 @@ public class ApiAccountDTO implements Serializable {
         }
         synchronized (this) {
             if (publicKey == null) {
-                publicKey = (RSAPublicKey) CertUtil.readPublicKeyCer(apiPub);
+                if (apiPub == null || apiPub.isEmpty()) {
+                    return null;
+                }
+                try {
+                    publicKey = CertUtil.readPublicKeyPemString(apiPub);
+                } catch (CertException e) {
+                    throw new RuntimeException("read pem error", e);
+                }
             }
         }
         return publicKey;

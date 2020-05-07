@@ -37,7 +37,7 @@ public class AuthProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (rsa != null && isRsa()) {
+        if (rsa != null && isAuthType(AuthType.AUTH_TYPE_RSA)) {
             if (Objects.nonNull(rsa.getServerPublicKey())) {
                 return;
             }
@@ -47,17 +47,16 @@ public class AuthProperties implements InitializingBean {
                 rsa.setServerPrivateKey((RSAPrivateKey) CertUtil.getPrivateKey(keyStore, rsa.getCertP12Password(), null));
             } else {
                 rsa.setVerifyOnly(true);
-                rsa.setServerPublicKey((RSAPublicKey) CertUtil.getPublicKeyCer(new FileInputStream(rsa.getPublicCertPath())).getPublicKey());
+                rsa.setServerPublicKey((RSAPublicKey) CertUtil.readPublicKeyPem(rsa.getPublicCertPath()));
             }
             return;
         }
-        if (sm2 != null && isSm2()) {
+        if (sm2 != null && isAuthType(AuthType.AUTH_TYPE_SM2)) {
             if (Objects.nonNull(sm2.getServerPublicKey())) {
                 return;
             }
             if (StringUtils.hasText(sm2.getCertP12Path())) {
-                KeyStore keyStore;
-                keyStore = CertUtil.readKeyStore(sm2.getCertP12Path(), sm2.getCertP12Password());
+                KeyStore keyStore = CertUtil.readKeyStore(sm2.getCertP12Path(), sm2.getCertP12Password());
                 sm2.setServerPublicKey(CertUtil.getPublicKey(keyStore, null));
                 sm2.setServerPrivateKey(CertUtil.getPrivateKey(keyStore, sm2.getCertP12Password(), null));
             } else {
@@ -69,12 +68,12 @@ public class AuthProperties implements InitializingBean {
 
     }
 
-    public boolean isRsa() {
-        return type.equals(AuthType.AUTH_TYPE_RSA);
-    }
 
-    public boolean isSm2() {
-        return type.equals(AuthType.AUTH_TYPE_SM2);
+    public boolean isAuthType(String authType) {
+        if (StringUtils.hasText(type) && authType.equals(type)) {
+            return true;
+        }
+        return false;
     }
 
     @Data

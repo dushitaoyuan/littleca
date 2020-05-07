@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class CBeanMapper {
-    public static final String[] mapings = {"dozer.xml"};
+    public static final String[] mapings = {};
     private static Mapper mapper = new DozerBeanMapper(Lists.newArrayList(mapings));
 
 
