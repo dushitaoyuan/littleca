@@ -34,14 +34,19 @@ public class LittleAuthRequestTest {
 
 
     @Test
-    public  void tokenCanceltest(){
-        String m="eyJ0eXBlIjoxLCJjIjozLCJ1IjoiZHVzaGl0YW95dWFuLWhtYWMiLCJzIjoxNTg4ODM1ODkxNDI2LCJlIjoxNTg4ODQxMjkxNDI2fQ.QH_7HECy5wwr_kt81-WBn_zXVhzbDYA6y-55Xe-v8UA";
-        HMacSign hMacSign=new HMacSign(HMacAlgorithms.HMAC_SHA_256,"dushitaoyuan".getBytes());
-        SimpleTokenManager simpleTokenManager=new SimpleTokenManager(hMacSign);
+    public void tokenCancelTest() {
+        String m = "eyJ0eXBlIjoxLCJjIjozLCJ1IjoiZHVzaGl0YW95dWFuLWhtYWMiLCJzIjoxNTg4ODM1ODkxNDI2LCJlIjoxNTg4ODQxMjkxNDI2fQ.QH_7HECy5wwr_kt81-WBn_zXVhzbDYA6y-55Xe-v8UA";
+
+        HMacSign hMacSign = new HMacSign(HMacAlgorithms.HMAC_SHA_256, "dushitaoyuan".getBytes());
+        SimpleTokenManager simpleTokenManager = new SimpleTokenManager(hMacSign);
         Token token = simpleTokenManager.parseToken(m);
+        String tokenS = simpleTokenManager.createToken(token);
+        System.out.println(tokenS);
+        Token token1 = simpleTokenManager.parseToken(tokenS);
         System.out.println(token.getEndTime());
         System.out.println(DigestUtils.md5Hex(m));
     }
+
     @Test
     public void hmacAuthRequestBuildTest() throws Exception {
         String apiAccount = "dushitaoyuan-hmac";
@@ -55,7 +60,7 @@ public class LittleAuthRequestTest {
     public void hmacAuthRefreshRequestBuildTest() throws Exception {
         String apiSercet = "dushitaoyuan";
         ISign hMacSign = new HMacSign(HMacAlgorithms.HMAC_SHA_256, apiSercet.getBytes("UTF-8"));
-        String refreshToken = "eyJhcGlJZCI6MSwiYXBpQWNjb3VudCI6ImR1c2hpdGFveXVhbiIsImNyZWF0ZVRpbWUiOjE1ODI2OTA4MTQ2NTYsImVuZFRpbWUiOjE1ODI2OTgwMTQ2NTYsInR5cGUiOjJ9.MYfi9e7ygm2ATy3GcRTdo7CUwM3Sg0NDNemWDGBjqjM";
+        String refreshToken = "eyJ0eXBlIjoyLCJjIjozLCJ1IjoiZHVzaGl0YW95dWFuLWhtYWMiLCJzIjoxNTg4OTExMTY4NjY2LCJlIjoxNTg4OTE4MzY4NjY2fQ.dVOsJmxQS7w2Jp6wuV1dSktE_hOsVJu7um2g-N65eKw";
         AuthRefreshRequestDTO authRefreshRequestDTO = newAuthRefreshRequest(hMacSign, refreshToken);
         System.out.println(JSONUtil.toJsonString(authRefreshRequestDTO));
     }
@@ -111,6 +116,7 @@ public class LittleAuthRequestTest {
         encodeRequestDTO.setData(Base64.encodeBase64URLSafeString(sm2.encrypt(data, serverPublicKey)));
         System.out.println(JSONUtil.toJsonString(encodeRequestDTO));
     }
+
     @Test
     public void sm2AuthRefreshRequestBuildTest() throws Exception {
         String p12Password = "123456";
@@ -127,6 +133,7 @@ public class LittleAuthRequestTest {
         encodeRequestDTO.setData(RSAUtil.encryptByPublicKey(data, serverPublicKey));
         System.out.println(JSONUtil.toJsonString(encodeRequestDTO));
     }
+
     public AuthRequestDTO newAuthRequest(ISign signImpl, String apiAccount) throws Exception {
         String random = RandomCodeUtil.getRandCode(16);
         Long timestamp = System.currentTimeMillis();
@@ -134,7 +141,7 @@ public class LittleAuthRequestTest {
         authRequestDTO.setApiAccount(apiAccount);
         authRequestDTO.setRandom(random);
         authRequestDTO.setTimestamp(timestamp);
-        String signStr = random + apiAccount + timestamp;
+        String signStr = authRequestDTO.toSignStr();
         String sign = signImpl.sign(signStr);
         authRequestDTO.setSign(sign);
         return authRequestDTO;
@@ -143,7 +150,8 @@ public class LittleAuthRequestTest {
     public AuthRefreshRequestDTO newAuthRefreshRequest(ISign signImpl, String refreshToken) throws Exception {
         AuthRefreshRequestDTO authRefreshRequestDTO = new AuthRefreshRequestDTO();
         authRefreshRequestDTO.setRefreshToken(refreshToken);
-        String signStr = refreshToken;
+        authRefreshRequestDTO.setTimestamp(System.currentTimeMillis());
+        String signStr = authRefreshRequestDTO.toSignStr();
         String sign = signImpl.sign(signStr);
         authRefreshRequestDTO.setSign(sign);
         return authRefreshRequestDTO;

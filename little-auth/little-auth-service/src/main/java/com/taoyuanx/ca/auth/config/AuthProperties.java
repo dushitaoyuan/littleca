@@ -37,7 +37,8 @@ public class AuthProperties implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        if (rsa != null && isAuthType(AuthType.AUTH_TYPE_RSA)) {
+        AuthType type = AuthType.type(getType());
+        if (rsa != null && AuthType.RSA.equals(type)) {
             if (Objects.nonNull(rsa.getServerPublicKey())) {
                 return;
             }
@@ -51,7 +52,7 @@ public class AuthProperties implements InitializingBean {
             }
             return;
         }
-        if (sm2 != null && isAuthType(AuthType.AUTH_TYPE_SM2)) {
+        if (sm2 != null && AuthType.SM2.equals(type)) {
             if (Objects.nonNull(sm2.getServerPublicKey())) {
                 return;
             }
@@ -68,13 +69,6 @@ public class AuthProperties implements InitializingBean {
 
     }
 
-
-    public boolean isAuthType(String authType) {
-        if (StringUtils.hasText(type) && authType.equals(type)) {
-            return true;
-        }
-        return false;
-    }
 
     @Data
     public static class RsaAuthProperties {

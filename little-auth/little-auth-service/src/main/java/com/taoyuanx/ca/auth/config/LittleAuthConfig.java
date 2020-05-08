@@ -47,28 +47,34 @@ public class LittleAuthConfig {
     @Bean
     @ConditionalOnMissingBean(TokenManager.class)
     public TokenManager tokenManager(AuthProperties authProperties) throws Exception {
-
         ISign sign = null;
-        if (authProperties.isAuthType(AuthType.AUTH_TYPE_RSA)) {
-            AuthProperties.RsaAuthProperties rsa = authProperties.getRsa();
-            if (rsa.isVerifyOnly()) {
-                sign = new RsaSign(rsa.getServerPublicKey(), rsa.getSignAlg());
-            } else {
-                sign = new RsaSign(rsa.getServerPublicKey(), rsa.getServerPrivateKey(), rsa.getSignAlg());
-            }
-
-        } else if (authProperties.isAuthType(AuthType.AUTH_TYPE_SM2)) {
-            AuthProperties.Sm2AuthProperties sm2 = authProperties.getSm2();
-            if (sm2.isVerifyOnly()) {
-                sign = new Sm2Sign(sm2.getServerPublicKey(), sm2.getSignAlg());
-            } else {
-                sign = new Sm2Sign(sm2.getServerPublicKey(), sm2.getServerPrivateKey(), sm2.getSignAlg());
-            }
-        } else if (authProperties.isAuthType(AuthType.AUTH_TYPE_HMAC)) {
-            AuthProperties.HmacAuthProperties hmac = authProperties.getHmac();
-            sign = new HMacSign(HMacAlgorithms.valueOf(authProperties.getHmac().getSignAlg()), hmac.getKey().getBytes("UTF-8"));
-        } else {
+        AuthType type = AuthType.type(authProperties.getType());
+        if (Objects.isNull(type)) {
             throw new RuntimeException("auth type" + authProperties.getType() + "not support");
+        }
+        switch (type) {
+            case HMAC:
+                AuthProperties.HmacAuthProperties hmac = authProperties.getHmac();
+                sign = new HMacSign(HMacAlgorithms.valueOf(authProperties.getHmac().getSignAlg()), hmac.getKey().getBytes("UTF-8"));
+                break;
+            case RSA:
+                AuthProperties.RsaAuthProperties rsa = authProperties.getRsa();
+                if (rsa.isVerifyOnly()) {
+                    sign = new RsaSign(rsa.getServerPublicKey(), rsa.getSignAlg());
+                } else {
+                    sign = new RsaSign(rsa.getServerPublicKey(), rsa.getServerPrivateKey(), rsa.getSignAlg());
+                }
+                break;
+            case SM2:
+                AuthProperties.Sm2AuthProperties sm2 = authProperties.getSm2();
+                if (sm2.isVerifyOnly()) {
+                    sign = new Sm2Sign(sm2.getServerPublicKey(), sm2.getSignAlg());
+                } else {
+                    sign = new Sm2Sign(sm2.getServerPublicKey(), sm2.getServerPrivateKey(), sm2.getSignAlg());
+                }
+                break;
+            default:
+                throw new RuntimeException("auth type" + authProperties.getType() + "not support");
         }
         return new SimpleTokenManager(sign);
 

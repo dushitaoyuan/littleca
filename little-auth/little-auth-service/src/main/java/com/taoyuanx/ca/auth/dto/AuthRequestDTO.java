@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @date 2020/2/17
  */
 @Data
-public class AuthRequestDTO implements Serializable {
+public class AuthRequestDTO implements ISignDTO {
     /**
      * 随机数
      */
@@ -27,4 +27,9 @@ public class AuthRequestDTO implements Serializable {
      * random+apiAccount+timestamp 签名
      */
     private String sign;
+
+    @Override
+    public String toSignStr() {
+        return random + apiAccount + timestamp;
+    }
 }
