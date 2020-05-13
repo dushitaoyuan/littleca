@@ -1,16 +1,17 @@
 package com.taoyuanx.ca.auth.controller;
 
 import cn.hutool.core.util.StrUtil;
+import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.response.AuthResultDTO;
+import com.taoyuanx.auth.dto.response.EncodeResponseDTO;
 import com.taoyuanx.auth.dto.Result;
 import com.taoyuanx.auth.dto.ResultBuilder;
 import com.taoyuanx.auth.exception.AuthException;
 import com.taoyuanx.auth.utils.JSONUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
-import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthResultDTO;
-import com.taoyuanx.ca.auth.dto.EncodeRequestDTO;
+import com.taoyuanx.auth.dto.request.EncodeRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import com.taoyuanx.ca.auth.helper.AuthResultWrapper;
 import com.taoyuanx.ca.core.api.impl.SM2;
@@ -56,9 +57,7 @@ public class Sm2AuthApiController {
         }
         AuthRequestDTO authRequestDTO = JSONUtil.parseObject(data, AuthRequestDTO.class);
         AuthResultWrapper resultWrapper = apiAccountAuthHelper.auth(authRequestDTO, AuthType.SM2, request);
-        AuthResultDTO authResultDTO = resultWrapper.getAuthResult();
-        String encryptData = Base64.encodeBase64URLSafeString(sm2.encrypt(JSONUtil.toJsonBytes(authResultDTO), resultWrapper.getApiAccount().getPublicKey()));
-        return ResultBuilder.successResult(encryptData);
+        return encodeResult(resultWrapper, sm2Config);
     }
 
     @PostMapping("refresh")
@@ -78,10 +77,24 @@ public class Sm2AuthApiController {
         }
         AuthRefreshRequestDTO authRefreshRequestDTO = JSONUtil.parseObject(data, AuthRefreshRequestDTO.class);
         AuthResultWrapper resultWrapper = apiAccountAuthHelper.authRefresh(authRefreshRequestDTO, AuthType.SM2, request);
-        AuthResultDTO authResultDTO = resultWrapper.getAuthResult();
-        String encryptData = Base64.encodeBase64URLSafeString(sm2.encrypt(JSONUtil.toJsonBytes(authResultDTO), resultWrapper.getApiAccount().getPublicKey()));
-        return ResultBuilder.successResult(encryptData);
+        return encodeResult(resultWrapper, sm2Config);
     }
 
+    private Result encodeResult(AuthResultWrapper resultWrapper, AuthProperties.Sm2AuthProperties sm2Config) throws Exception {
+        AuthResultDTO authResultDTO = resultWrapper.getAuthResult();
+        EncodeResponseDTO encodeResponseDTO = new EncodeResponseDTO();
+        byte[] data = JSONUtil.toJsonBytes(authResultDTO);
+        if (sm2Config.isResultEncode()) {
+            String encryptData = Base64.encodeBase64URLSafeString(sm2.encrypt(data, resultWrapper.getApiAccount().getPublicKey()));
+            encodeResponseDTO.setData(encryptData);
+            encodeResponseDTO.setEncode(EncodeResponseDTO.ENCODE_YES);
+        } else {
+            encodeResponseDTO.setEncode(EncodeResponseDTO.ENCODE_NO);
+            encodeResponseDTO.setData(JSONUtil.toJsonString(authResultDTO));
+        }
+        encodeResponseDTO.setSign(Base64.encodeBase64String(sm2.sign(data,sm2Config.getServerPrivateKey(),sm2Config.getSignAlg())));
+        return ResultBuilder.success(encodeResponseDTO);
+
+    }
 
 }

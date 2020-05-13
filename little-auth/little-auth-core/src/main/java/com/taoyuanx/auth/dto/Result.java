@@ -46,7 +46,6 @@ public class Result implements Serializable {
     public Result buildData(Object data) {
         this.data = data;
         return this;
-
     }
 
     public Result buildExt(Object ext) {

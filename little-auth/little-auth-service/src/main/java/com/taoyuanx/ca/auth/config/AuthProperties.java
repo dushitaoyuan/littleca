@@ -1,13 +1,13 @@
 package com.taoyuanx.ca.auth.config;
 
-import com.taoyuanx.ca.auth.constants.AuthType;
+import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.sign.impl.hmac.HMacAlgorithms;
 import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import java.io.FileInputStream;
 import java.security.KeyStore;
 import java.security.PrivateKey;
 import java.security.PublicKey;
@@ -66,7 +66,6 @@ public class AuthProperties implements InitializingBean {
             }
             return;
         }
-
     }
 
 
@@ -81,6 +80,11 @@ public class AuthProperties implements InitializingBean {
         private RSAPrivateKey serverPrivateKey;
         private String signAlg;
         private boolean verifyOnly = false;
+        /**
+         * 结果是否加密
+         */
+        private boolean resultEncode=true;
+
 
 
     }
@@ -96,13 +100,16 @@ public class AuthProperties implements InitializingBean {
         private PrivateKey serverPrivateKey;
         private String signAlg = "SM3WITHSM2";
         private boolean verifyOnly = false;
-
+        /**
+         * 结果是否加密
+         */
+        private boolean resultEncode=true;
 
     }
 
     @Data
     public static class HmacAuthProperties {
-        private String key;
-        private String signAlg;
+        private String  key;
+        private HMacAlgorithms signAlg;
     }
 }

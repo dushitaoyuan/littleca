@@ -11,6 +11,7 @@ public enum ResultCode {
     OK(1, "success"),
     FAIL(0, "failed"),
     UNAUTHORIZED(401, "权限异常"),
+
     NOT_FOUND(404, "service not found"),
     UN_SUPPORT_MEDIATYPE(415, "不支持媒体类型"),
     PARAM_ERROR(400, "参数异常"),
@@ -19,8 +20,10 @@ public enum ResultCode {
 
 
     BUSSINESS_ERROR(1001, "业务异常"),
+    TOKEN_CANCEL(1002, "token主动注销"),
     SIGN_ERROR(8888, "数据签名异常"),
     TOKEN_ERROR(8889, "token非法"),
+
     DECOED_ENCODE_ERROR(8890, "加解密异常");
     public int code;
     public String desc;

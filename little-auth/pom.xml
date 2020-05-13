@@ -11,7 +11,9 @@
 
     <modules>
         <module>little-auth-core</module>
+        <module>little-auth-token-core</module>
         <module>little-auth-service</module>
+        <module>little-auth-client</module>
     </modules>
     <dependencyManagement>
         <dependencies>
@@ -22,11 +24,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <dependencies>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-    </dependencies>
 </project>

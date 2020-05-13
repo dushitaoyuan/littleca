@@ -2,11 +2,13 @@
 
 ## 项目介绍
 little-auth 基于littleca的认证服务 
-1. little-auth-core 核心依赖包
-2. little-auth-service 认证服务
+1. little-auth-core 认证核心依赖包
+2. little-auth-token-core token实现
+3. little-auth-client token client包,外部系统引用
+4. little-auth-service 认证服务
    token实现参见 com.taoyuanx.auth.SimpleTokenManager
-   支持 多种hmac 算法，和rsa，支持国密sm3
-3. 支持token主动注销和激活(需client支持)
+   支持 多种hmac 算法，和rsa，支持国密sm3,sm2
+5. 支持token主动注销和激活(需client支持)
 
 
 ## api简介

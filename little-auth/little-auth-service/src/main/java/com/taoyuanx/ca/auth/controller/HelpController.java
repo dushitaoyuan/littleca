@@ -36,6 +36,13 @@ public class HelpController {
     }
 
     /**
+     * 心跳监测
+     */
+    @GetMapping(value = "hello")
+    public void hello(HttpServletResponse response) throws Exception {
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+    /**
      * 提供主动注销token,主动激活token功能(可选,不常用,只允许管理端使用) 需配合认证client 再请求一次服务端验证token是否被主动注销
      * 实现逻辑:
      * 服务端缓存注销表,client验证通过后,在请求服务端验证token是否被主动注销,client查询结果缓存3分钟

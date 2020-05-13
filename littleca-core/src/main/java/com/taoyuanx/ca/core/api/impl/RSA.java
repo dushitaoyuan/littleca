@@ -16,60 +16,55 @@ import com.taoyuanx.ca.core.util.Util;
 
 /**
  * rsa非对称操作 实现
+ *
  * @author 都市桃源
  * 2018年7月1日下午10:36:40
  */
-public class RSA implements AsymmetricalCipher,AsymmetricalSignature{
-	
-	@Override
-	public byte[] encrypt(byte[] data, PublicKey publicKey) throws Exception {
-		Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.RSA_NOPADDING_CIPHER);
-		cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-		// 模长
-		int key_len = ((RSAPublicKey) publicKey).getModulus().bitLength() / 8;
-		// 加密数据长度 <= 模长-11,如果明文长度大于模长-11则要分组加密
-		key_len -= 11;
-		ByteArrayOutputStream out=new ByteArrayOutputStream();
-		for (int i = 0; i < data.length; i += key_len) {
-			byte[] doFinal = cipher.doFinal(Util.subarray(data, i, i +key_len));
-			out.write(doFinal);
-		}
-		return out.toByteArray();
-	}
+public class RSA implements AsymmetricalCipher, AsymmetricalSignature {
 
-	@Override
-	public byte[] decrypt(byte[] data, PrivateKey privateKey) throws Exception {
-		
-		Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.RSA_NOPADDING_CIPHER);
-		cipher.init(Cipher.DECRYPT_MODE, privateKey);
-		// 模长
-		int key_len = ((RSAPrivateKey) privateKey).getModulus().bitLength() / 8;
-		// 分组解密
-		ByteArrayOutputStream out=new ByteArrayOutputStream();
-		// 如果密文长度大于模长则要分组解密
-		for (int i = 0; i <data.length ; i += key_len) {
-			byte[] doFinal = cipher.doFinal(Util.subarray(data, i, i + key_len));
-			out.write(doFinal);
-		}
-		return out.toByteArray();
-	}
+    @Override
+    public byte[] encrypt(byte[] data, PublicKey publicKey) throws Exception {
+        Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.RSA_NOPADDING_CIPHER);
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+        int key_len = ((RSAPublicKey) publicKey).getModulus().bitLength() / 8;
+        key_len -= 11;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
+        for (int i = 0; i < data.length; i += key_len) {
+            byte[] doFinal = cipher.doFinal(Util.subarray(data, i, i + key_len));
+            out.write(doFinal, 0, doFinal.length);
+        }
+        return out.toByteArray();
+    }
 
-	@Override
-	public byte[] sign(byte[] data, PrivateKey privateKey, String signAlgorithm) throws Exception {
-		Signature signature = AsymmetricalUtil.getSignatureInstance(signAlgorithm);
-		signature.initSign(privateKey);
-		signature.update(data);
-		return signature.sign();
-	}
+    @Override
+    public byte[] decrypt(byte[] data, PrivateKey privateKey) throws Exception {
 
-	@Override
-	public boolean verifySign(byte[] signData, byte[] content, PublicKey publicKey, String signAlgorithm) throws Exception {
-		Signature signature = AsymmetricalUtil.getSignatureInstance(signAlgorithm);
-		signature.initVerify(publicKey);
-		signature.update(content);
-		return signature.verify(signData);
-	}
+        Cipher cipher = AsymmetricalUtil.getCipherInstance(AsymmetricalCipher.RSA_NOPADDING_CIPHER);
+        cipher.init(Cipher.DECRYPT_MODE, privateKey);
+        int key_len = ((RSAPrivateKey) privateKey).getModulus().bitLength() / 8;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(data.length);
+        for (int i = 0; i < data.length; i += key_len) {
+            byte[] doFinal = cipher.doFinal(Util.subarray(data, i, i + key_len));
+            out.write(doFinal);
+        }
+        return out.toByteArray();
+    }
 
+    @Override
+    public byte[] sign(byte[] data, PrivateKey privateKey, String signAlgorithm) throws Exception {
+        Signature signature = AsymmetricalUtil.getSignatureInstance(signAlgorithm);
+        signature.initSign(privateKey);
+        signature.update(data);
+        return signature.sign();
+    }
+
+    @Override
+    public boolean verifySign(byte[] signData, byte[] content, PublicKey publicKey, String signAlgorithm) throws Exception {
+        Signature signature = AsymmetricalUtil.getSignatureInstance(signAlgorithm);
+        signature.initVerify(publicKey);
+        signature.update(content);
+        return signature.verify(signData);
+    }
 
 
 }

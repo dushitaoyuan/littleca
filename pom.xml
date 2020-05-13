@@ -21,6 +21,7 @@
         <module>littleca-core</module>
         <module>littleca-tsa</module>
         <module>littleca-ui</module>
+
         <module>little-auth</module>
         <module>littleca-shell</module>
     </modules>

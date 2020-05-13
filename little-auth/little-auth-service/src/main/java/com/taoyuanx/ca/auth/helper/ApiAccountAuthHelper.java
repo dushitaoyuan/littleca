@@ -1,21 +1,22 @@
 package com.taoyuanx.ca.auth.helper;
 
 import cn.hutool.core.util.StrUtil;
-import com.taoyuanx.auth.TokenManager;
-import com.taoyuanx.auth.TokenTypeEnum;
+import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.ApiAccountDTO;
 import com.taoyuanx.auth.exception.AuthException;
 import com.taoyuanx.auth.sign.ISign;
+import com.taoyuanx.auth.sign.impl.hmac.HMacSign;
 import com.taoyuanx.auth.sign.impl.RsaSign;
 import com.taoyuanx.auth.sign.impl.Sm2Sign;
 import com.taoyuanx.auth.token.Token;
+import com.taoyuanx.auth.token.TokenManager;
+import com.taoyuanx.auth.token.TokenTypeEnum;
 import com.taoyuanx.auth.utils.IpWhiteCheckUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
 import com.taoyuanx.ca.auth.constants.AuthCaheConstant;
-import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthResultDTO;
 import com.taoyuanx.ca.auth.service.ApiAccountService;
 import com.taoyuanx.ca.auth.utils.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -227,7 +228,7 @@ public class ApiAccountAuthHelper {
     private ISign newSign(ApiAccountDTO apiAccountDTO, AuthType authType) {
         switch (authType) {
             case HMAC:
-                return new RsaSign((RSAPublicKey) apiAccountDTO.getPublicKey(), authProperties.getHmac().getSignAlg());
+                return new HMacSign(authProperties.getHmac().getSignAlg(), apiAccountDTO.getApiSecret().getBytes());
             case RSA:
                 apiAccountDTO.readToPublicKey();
                 return new RsaSign((RSAPublicKey) apiAccountDTO.getPublicKey(), authProperties.getRsa().getSignAlg());

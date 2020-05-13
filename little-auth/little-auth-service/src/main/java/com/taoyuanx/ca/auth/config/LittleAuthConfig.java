@@ -1,17 +1,16 @@
 package com.taoyuanx.ca.auth.config;
 
-import com.taoyuanx.auth.SimpleTokenManager;
-import com.taoyuanx.auth.TokenManager;
-import com.taoyuanx.auth.mac.HMacAlgorithms;
+import com.taoyuanx.auth.AuthType;
 import com.taoyuanx.auth.sign.ISign;
-import com.taoyuanx.auth.sign.impl.HMacSign;
+import com.taoyuanx.auth.sign.impl.hmac.HMacSign;
 import com.taoyuanx.auth.sign.impl.RsaSign;
 import com.taoyuanx.auth.sign.impl.Sm2Sign;
-import com.taoyuanx.ca.auth.constants.AuthType;
+import com.taoyuanx.auth.token.TokenManager;
+import com.taoyuanx.auth.token.impl.SimpleTokenManager;
 import com.taoyuanx.ca.auth.controller.HmacAuthApiController;
 import com.taoyuanx.ca.auth.controller.RsaAuthApiController;
 import com.taoyuanx.ca.auth.controller.Sm2AuthApiController;
-import org.apache.commons.codec.digest.HmacAlgorithms;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +45,7 @@ public class LittleAuthConfig {
 
     @Bean
     @ConditionalOnMissingBean(TokenManager.class)
+    @ConditionalOnBean(AuthProperties.class)
     public TokenManager tokenManager(AuthProperties authProperties) throws Exception {
         ISign sign = null;
         AuthType type = AuthType.type(authProperties.getType());
@@ -55,7 +55,7 @@ public class LittleAuthConfig {
         switch (type) {
             case HMAC:
                 AuthProperties.HmacAuthProperties hmac = authProperties.getHmac();
-                sign = new HMacSign(HMacAlgorithms.valueOf(authProperties.getHmac().getSignAlg()), hmac.getKey().getBytes("UTF-8"));
+                sign = new HMacSign(authProperties.getHmac().getSignAlg(), hmac.getKey().getBytes("UTF-8"));
                 break;
             case RSA:
                 AuthProperties.RsaAuthProperties rsa = authProperties.getRsa();

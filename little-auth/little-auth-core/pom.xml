@@ -8,10 +8,10 @@
     </parent>
     <artifactId>little-auth-core</artifactId>
     <packaging>jar</packaging>
-
+    <description>认证服务核心依赖</description>
 
     <dependencies>
-    <dependency>
+        <dependency>
             <groupId>com.taoyuanx</groupId>
             <artifactId>littleca-core</artifactId>
         </dependency>
@@ -34,7 +34,6 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
-
 
 
     </dependencies>

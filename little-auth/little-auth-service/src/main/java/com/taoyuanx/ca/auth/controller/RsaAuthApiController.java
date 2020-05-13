@@ -1,22 +1,24 @@
 package com.taoyuanx.ca.auth.controller;
 
 import cn.hutool.core.util.StrUtil;
-import com.taoyuanx.auth.TokenManager;
+import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.response.AuthResultDTO;
+import com.taoyuanx.auth.dto.response.EncodeResponseDTO;
 import com.taoyuanx.auth.dto.Result;
 import com.taoyuanx.auth.dto.ResultBuilder;
 import com.taoyuanx.auth.exception.AuthException;
+import com.taoyuanx.auth.token.TokenManager;
 import com.taoyuanx.auth.utils.JSONUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
-import com.taoyuanx.ca.auth.constants.AuthType;
 import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthResultDTO;
-import com.taoyuanx.ca.auth.dto.EncodeRequestDTO;
+import com.taoyuanx.auth.dto.request.EncodeRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import com.taoyuanx.ca.auth.helper.AuthResultWrapper;
 import com.taoyuanx.ca.auth.service.ApiAccountService;
-import com.taoyuanx.ca.core.util.RSAUtil;
+import com.taoyuanx.ca.core.api.impl.RSA;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.interfaces.RSAPublicKey;
 
 /**
  * @author dushitaoyuan
@@ -48,6 +49,8 @@ public class RsaAuthApiController {
     @Autowired
     ApiAccountAuthHelper apiAccountAuthHelper;
 
+    private RSA rsa = new RSA();
+
     @PostMapping
     @ResponseBody
     public Result auth(@RequestBody EncodeRequestDTO authRequestEncode, HttpServletRequest request) throws Exception {
@@ -58,16 +61,14 @@ public class RsaAuthApiController {
         AuthProperties.RsaAuthProperties rsaConfig = authProperties.getRsa();
         String data = null;
         try {
-            data = RSAUtil.decryptByPrivateKey(encodeData, rsaConfig.getServerPrivateKey());
+            data = new String(rsa.decrypt(Base64.decodeBase64(encodeData), rsaConfig.getServerPrivateKey()), "UTF-8");
         } catch (Exception e) {
             log.error("认证服务解密异常:[{}],加密数据:[{}],异常信息:{}", e, encodeData, e);
             throw new AuthException("认证服务解密异常");
         }
         AuthRequestDTO authRequestDTO = JSONUtil.parseObject(data, AuthRequestDTO.class);
         AuthResultWrapper resultWrapper = apiAccountAuthHelper.auth(authRequestDTO, AuthType.RSA, request);
-        AuthResultDTO authResultDTO = resultWrapper.getAuthResult();
-        String encryptData = RSAUtil.encryptByPublicKey(JSONUtil.toJsonString(authResultDTO), (RSAPublicKey) resultWrapper.getApiAccount().getPublicKey());
-        return ResultBuilder.successResult(encryptData);
+        return encodeResult(resultWrapper, rsaConfig);
     }
 
     @PostMapping("refresh")
@@ -80,16 +81,31 @@ public class RsaAuthApiController {
         AuthProperties.RsaAuthProperties rsaConfig = authProperties.getRsa();
         String data = null;
         try {
-            data = RSAUtil.decryptByPrivateKey(encodeData, rsaConfig.getServerPrivateKey());
+            data = new String(rsa.decrypt(Base64.decodeBase64(encodeData), rsaConfig.getServerPrivateKey()), "UTF-8");
         } catch (Exception e) {
             log.error("认证服务解密异常:[{}],加密数据:[{}]", e, encodeData);
             throw new AuthException("认证服务解密异常");
         }
         AuthRefreshRequestDTO authRefreshRequestDTO = JSONUtil.parseObject(data, AuthRefreshRequestDTO.class);
         AuthResultWrapper resultWrapper = apiAccountAuthHelper.authRefresh(authRefreshRequestDTO, AuthType.RSA, request);
+        return encodeResult(resultWrapper, rsaConfig);
+    }
+
+    private Result encodeResult(AuthResultWrapper resultWrapper, AuthProperties.RsaAuthProperties rsaConfig) throws Exception {
         AuthResultDTO authResultDTO = resultWrapper.getAuthResult();
-        String encryptData = RSAUtil.encryptByPublicKey(JSONUtil.toJsonString(authResultDTO), (RSAPublicKey) resultWrapper.getApiAccount().getPublicKey());
-        return ResultBuilder.successResult(encryptData);
+        EncodeResponseDTO encodeResponseDTO = new EncodeResponseDTO();
+        byte[] data = JSONUtil.toJsonBytes(authResultDTO);
+        if (rsaConfig.isResultEncode()) {
+            String encryptData = Base64.encodeBase64URLSafeString(rsa.encrypt(data, resultWrapper.getApiAccount().getPublicKey()));
+            encodeResponseDTO.setData(encryptData);
+            encodeResponseDTO.setEncode(EncodeResponseDTO.ENCODE_YES);
+        } else {
+            encodeResponseDTO.setEncode(EncodeResponseDTO.ENCODE_NO);
+            encodeResponseDTO.setData(JSONUtil.toJsonString(authResultDTO));
+        }
+        encodeResponseDTO.setSign(Base64.encodeBase64String(rsa.sign(data,rsaConfig.getServerPrivateKey(),rsaConfig.getSignAlg())));
+        return ResultBuilder.success(encodeResponseDTO);
+
     }
 
 }

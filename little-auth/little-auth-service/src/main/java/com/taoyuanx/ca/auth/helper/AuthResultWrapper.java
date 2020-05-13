@@ -1,7 +1,7 @@
 package com.taoyuanx.ca.auth.helper;
 
+import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.ApiAccountDTO;
-import com.taoyuanx.ca.auth.dto.AuthResultDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
