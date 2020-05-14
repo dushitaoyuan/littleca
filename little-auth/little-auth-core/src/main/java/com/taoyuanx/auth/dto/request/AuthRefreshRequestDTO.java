@@ -1,8 +1,7 @@
-package com.taoyuanx.ca.auth.dto;
+package com.taoyuanx.auth.dto.request;
 
 import lombok.Data;
 
-import java.io.Serializable;
 
 /**
  * @author dushitaoyuan
@@ -10,7 +9,7 @@ import java.io.Serializable;
  * @date 2020/2/17
  */
 @Data
-public class AuthRefreshRequestDTO implements com.taoyuanx.ca.auth.dto.ISignDTO {
+public class AuthRefreshRequestDTO implements ISignDTO {
 
     private String refreshToken;
 

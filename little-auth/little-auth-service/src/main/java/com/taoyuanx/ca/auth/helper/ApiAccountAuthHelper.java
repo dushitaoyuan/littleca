@@ -2,9 +2,11 @@ package com.taoyuanx.ca.auth.helper;
 
 import cn.hutool.core.util.StrUtil;
 import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.ApiAccountDTO;
-import com.taoyuanx.auth.exception.AuthException;
+import com.taoyuanx.auth.token.exception.AuthException;
 import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.sign.impl.hmac.HMacSign;
 import com.taoyuanx.auth.sign.impl.RsaSign;
@@ -15,8 +17,6 @@ import com.taoyuanx.auth.token.TokenTypeEnum;
 import com.taoyuanx.auth.utils.IpWhiteCheckUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
 import com.taoyuanx.ca.auth.constants.AuthCaheConstant;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import com.taoyuanx.ca.auth.service.ApiAccountService;
 import com.taoyuanx.ca.auth.utils.RequestUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -170,6 +170,11 @@ public class ApiAccountAuthHelper {
         token.setEndTime(now + authProperties.getTokenValidTime());
         token.setType(TokenTypeEnum.BUSSINESS.code);
         token.setApiAccount(apiAccount);
+        /**
+         *  生效时间(为空表示立即生效)
+         * token.setValidTime(now);
+         */
+
         String bussinessToken = tokenManager.createToken(token);
         token.setType(TokenTypeEnum.REFRESH.code);
         token.setEndTime(token.getEndTime() + authProperties.getRefreshTokenAddTime());

@@ -42,6 +42,7 @@ public class MemoryTokenCache implements TokenCache {
 
     @Data
     private static class CacheValue {
+        private static Object lock = new Object();
         private AuthResultDTO value;
         private Long endTime;
         private Function<AuthResultDTO, AuthResultDTO> valueReLoad;
@@ -55,12 +56,10 @@ public class MemoryTokenCache implements TokenCache {
         }
 
         public void reloadValue() {
-            if (endTime < System.currentTimeMillis()) {
-                synchronized (value) {
-                    if (endTime < System.currentTimeMillis()) {
-                        this.value = valueReLoad.apply(value);
-                        this.endTime = expire + System.currentTimeMillis();
-                    }
+            synchronized (lock) {
+                if (endTime < System.currentTimeMillis()) {
+                    this.value = valueReLoad.apply(value);
+                    this.endTime = expire + System.currentTimeMillis();
                 }
             }
         }

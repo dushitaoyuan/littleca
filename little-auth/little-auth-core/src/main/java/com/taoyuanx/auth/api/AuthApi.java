@@ -1,8 +1,8 @@
 package com.taoyuanx.auth.api;
 
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 
 /**
  * @author dushitaoyuan

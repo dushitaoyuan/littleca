@@ -1,4 +1,4 @@
-package com.taoyuanx.auth.exception;
+package com.taoyuanx.auth.token.exception;
 
 
 

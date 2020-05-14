@@ -1,7 +1,7 @@
 package com.taoyuanx.auth.token.impl;
 
 
-import com.taoyuanx.auth.exception.TokenException;
+import com.taoyuanx.auth.token.exception.TokenException;
 import com.taoyuanx.auth.sign.ISign;
 import com.taoyuanx.auth.token.Token;
 import com.taoyuanx.auth.token.TokenForamtUtil;
@@ -63,8 +63,13 @@ public class SimpleTokenManager implements TokenManager {
         if (tokenType == null || !tokenType.equals(TokenTypeEnum.type(token.getType()))) {
             throw new TokenException("token非法");
         }
+        Long now = System.currentTimeMillis();
+        Long validTime = token.getValidTime();
+        if (validTime != null && validTime > now) {
+            throw new TokenException("token未生效");
+        }
         Long end = token.getEndTime();
-        if (end < System.currentTimeMillis()) {
+        if (end < now) {
             throw new TokenException("token过期");
         }
         if (!doVerifySign(token.getData(), Base64.decodeBase64(token.getSign()))) {

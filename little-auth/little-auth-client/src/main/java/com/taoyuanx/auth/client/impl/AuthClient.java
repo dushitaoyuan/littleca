@@ -1,20 +1,16 @@
 package com.taoyuanx.auth.client.impl;
 
 import com.taoyuanx.auth.api.AuthApi;
-import com.taoyuanx.auth.client.Result;
-import com.taoyuanx.auth.client.utils.StrUtil;
 import com.taoyuanx.auth.client.utils.ThrowUtil;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.response.EncodeResponseDTO;
 import com.taoyuanx.auth.client.core.AuthServiceApiEnum;
 import com.taoyuanx.auth.client.core.ClientConfig;
 import com.taoyuanx.auth.client.utils.OkHttpUtil;
 import com.taoyuanx.auth.utils.JSONUtil;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import okhttp3.*;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Objects;
 

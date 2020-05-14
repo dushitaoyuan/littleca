@@ -1,11 +1,11 @@
 package com.taoyuanx.ca.auth.controller;
 
 import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.Result;
 import com.taoyuanx.auth.dto.ResultBuilder;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

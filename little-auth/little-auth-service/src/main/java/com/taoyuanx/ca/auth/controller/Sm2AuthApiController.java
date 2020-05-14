@@ -2,15 +2,15 @@ package com.taoyuanx.ca.auth.controller;
 
 import cn.hutool.core.util.StrUtil;
 import com.taoyuanx.auth.AuthType;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.dto.response.EncodeResponseDTO;
 import com.taoyuanx.auth.dto.Result;
 import com.taoyuanx.auth.dto.ResultBuilder;
-import com.taoyuanx.auth.exception.AuthException;
+import com.taoyuanx.auth.token.exception.AuthException;
 import com.taoyuanx.auth.utils.JSONUtil;
 import com.taoyuanx.ca.auth.config.AuthProperties;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import com.taoyuanx.auth.dto.request.EncodeRequestDTO;
 import com.taoyuanx.ca.auth.helper.ApiAccountAuthHelper;
 import com.taoyuanx.ca.auth.helper.AuthResultWrapper;

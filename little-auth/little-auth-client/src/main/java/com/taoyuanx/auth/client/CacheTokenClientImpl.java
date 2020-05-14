@@ -2,15 +2,14 @@ package com.taoyuanx.auth.client;
 
 
 import com.taoyuanx.auth.api.AuthApi;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.client.cache.TokenCache;
 import com.taoyuanx.auth.client.core.ClientConfig;
 import com.taoyuanx.auth.client.utils.RandomCodeUtil;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
 
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.LongAdder;
 
 /**
  * @author dushitaoyuan
@@ -22,7 +21,6 @@ public class CacheTokenClientImpl implements TokenClient {
     private TokenCache tokenCache;
     private ClientConfig clientConfig;
     private static Object lock = new Object();
-
 
     public CacheTokenClientImpl(AuthApi authApi, ClientConfig clientConfig, TokenCache tokenCache) {
         this.authApi = authApi;

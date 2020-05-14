@@ -3,7 +3,7 @@ package com.taoyuanx.ca.auth.config;
 
 import com.taoyuanx.auth.dto.Result;
 import com.taoyuanx.auth.dto.ResultBuilder;
-import com.taoyuanx.auth.exception.AuthException;
+import com.taoyuanx.auth.token.exception.AuthException;
 import com.taoyuanx.ca.auth.utils.ResponseUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

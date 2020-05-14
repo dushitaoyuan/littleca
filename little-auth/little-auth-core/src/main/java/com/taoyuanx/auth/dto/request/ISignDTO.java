@@ -1,4 +1,4 @@
-package com.taoyuanx.ca.auth.dto;
+package com.taoyuanx.auth.dto.request;
 
 import java.io.Serializable;
 

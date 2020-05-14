@@ -1,5 +1,8 @@
 package com.taoyuanx.test;
 
+import com.taoyuanx.auth.client.cache.TokenCache;
+import com.taoyuanx.auth.dto.request.AuthRefreshRequestDTO;
+import com.taoyuanx.auth.dto.request.AuthRequestDTO;
 import com.taoyuanx.auth.dto.response.AuthResultDTO;
 import com.taoyuanx.auth.client.CacheTokenClientImpl;
 import com.taoyuanx.auth.client.TokenClient;
@@ -8,8 +11,6 @@ import com.taoyuanx.auth.client.core.ClientConfig;
 import com.taoyuanx.auth.client.impl.AuthClient;
 import com.taoyuanx.auth.client.impl.DefaultSingletonAuthClientFactory;
 import com.taoyuanx.auth.client.utils.RandomCodeUtil;
-import com.taoyuanx.ca.auth.dto.AuthRefreshRequestDTO;
-import com.taoyuanx.ca.auth.dto.AuthRequestDTO;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;

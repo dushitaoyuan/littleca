@@ -13,24 +13,33 @@ public class Token {
     /**
      * api账户id
      */
-    @JsonProperty("c")
+    @JsonProperty("u")
     private Long apiId;
     /**
      * api账户
      */
-    @JsonProperty("u")
+    @JsonProperty("a")
     private String apiAccount;
     /**
-     * 起止时间
+     * 创建时间
      */
-    @JsonProperty("s")
+    @JsonProperty("c")
     private Long createTime;
+    /**
+     * 截止时间
+     */
     @JsonProperty("e")
     private Long endTime;
+    /**
+     * 生效时间
+     */
+    @JsonProperty("v")
+    private Long validTime;
     /**
      * token类型
      */
     private Integer type;
+
     /**
      * token 签名
      */
@@ -42,6 +51,14 @@ public class Token {
     @JsonIgnore
     private byte[] data;
 
+
+    public Long getValidTime() {
+        return validTime;
+    }
+
+    public void setValidTime(Long validTime) {
+        this.validTime = validTime;
+    }
 
     public String getApiAccount() {
         return apiAccount;

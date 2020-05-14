@@ -27,6 +27,8 @@ public class TokenTest {
         token.setApiId(1L);
         Long now=System.currentTimeMillis();
         token.setCreateTime(now);
+
+        //token.setValidTime(now+20*60*1000L);
         token.setEndTime(now+60*60*1000L);
         token.setType(TokenTypeEnum.BUSSINESS.code);
         String tokenStr = simpleTokenManager.createToken(token);
