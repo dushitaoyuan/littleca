@@ -42,12 +42,12 @@ public class HMacSign implements ISign {
     }
 
     @Override
-    public byte[] sign(byte[] data) throws Exception {
+    public synchronized byte[] sign(byte[] data) throws Exception {
         return hMac.doFinal(data);
     }
 
     @Override
-    public boolean verifySign(byte[] data, byte[] sign) throws Exception {
+    public synchronized boolean verifySign(byte[] data, byte[] sign) throws Exception {
         return Arrays.equals(sign, hMac.doFinal(data));
     }
 }
