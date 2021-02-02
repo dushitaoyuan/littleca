@@ -53,7 +53,7 @@ public class CertSubject {
     /**
      * java C=CN,ST=BJ,L=BJ,O=testclient,OU=testclient,CN=client
      */
-     private static String JAVA_SUBJECT_FORMAT = "\"C=%s,ST=%s,L=%s,O=%s,OU=%s,CN=%s\"";
+     private static String JAVA_SUBJECT_FORMAT = "C=%s,ST=%s,L=%s,O=%s,OU=%s,CN=%s";
 
 
     public String buildOpensslSubject() {

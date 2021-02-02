@@ -54,7 +54,7 @@ openssl genrsa  -out client_private.pem 2048
 openssl rsa -in client_private.pem -pubout -out client_public_key.pem 
 
 ::-- 生成请求证书
-openssl req -new -days 3650 -key client_private.pem -out client_req.pem -subj %1
+openssl req -new  -key client_private.pem -out client_req.pem -subj %1
 
 ::-- 根据请求证书生成x509公钥证书
 openssl ca -in client_req.pem -out client_public_key.pem -days 3650 -batch

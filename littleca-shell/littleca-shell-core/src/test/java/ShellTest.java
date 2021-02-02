@@ -1,4 +1,5 @@
 import com.taoyuanx.ca.shell.excutors.ShellExecutor;
+import com.taoyuanx.ca.shell.excutors.impl.LinuxShellExecutor;
 import com.taoyuanx.ca.shell.excutors.impl.WindowsShellExecutor;
 import com.taoyuanx.ca.shell.params.CertSubject;
 import com.taoyuanx.ca.shell.params.ShellParam;
@@ -27,13 +28,13 @@ public class ShellTest {
         shellParam.setOpensslConfPath("D:\\soft\\OpenSSL-Win64\\myca\\openssl.cfg");
         shellParam.setOpensslCaPrivateKeyPath("D:\\soft\\OpenSSL-Win64\\myca\\cacert.pem");
         shellParam.setCreateCertDir("D:\\soft\\OpenSSL-Win64\\myca\\myclient");
-        shellParam.setShellType(ShellType.OPENSSL_WINDOWS);
+        shellParam.setShellType(ShellType.JAVA);
     }
 
     @Test
     public void execShell() throws IOException {
 
-        ShellExecutor shellExecutor = new WindowsShellExecutor();
+        ShellExecutor shellExecutor = new LinuxShellExecutor();
         shellExecutor.execute(shellParam);
     }
 }

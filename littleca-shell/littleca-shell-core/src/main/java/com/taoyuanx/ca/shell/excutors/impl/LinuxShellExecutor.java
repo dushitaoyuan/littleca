@@ -9,8 +9,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author dushitaoyuan
@@ -21,7 +19,7 @@ public class LinuxShellExecutor implements ShellExecutor {
 
     @Override
     public void execute(ShellParam shellParam) throws IOException {
-        String cmd = shellParam.getShellPath() + " " + buildShellArgs(shellParam);
+        String cmd = "sh "+shellParam.getShellPath() + " -c  " + buildShellArgs(shellParam);
         LOG.info("exe cmd:[{}]", cmd);
         Process process = Runtime.getRuntime().exec(cmd);
         BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("UTF-8")));

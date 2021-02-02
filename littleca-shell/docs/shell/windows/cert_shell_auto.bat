@@ -69,7 +69,7 @@ openssl rsa -in client_private.pem -pubout -out client_public_key.pem
 
 ::--echo "genrsa client_public_key.pem"
 ::-- 生成请求证书
-openssl req -new -days %cert_expire_days% -key client_private.pem -out client_req.pem -subj %subject%
+openssl req -new  -key client_private.pem -out client_req.pem -subj %subject%
 
 ::--echo "genrsa client_req.pem"
 

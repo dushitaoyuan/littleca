@@ -1,31 +1,30 @@
 #!/bin/bash
-# sh -c xxx.sh
 #生成证书路径
-createCertDir=$3
+createCertDir=$2
 
-subject=$4
+subject=$3
 # cert密码
-cert_password=$5
+cert_password=$4
 
 
-rsa_bit_num=$6
+rsa_bit_num=$5
 
-cert_expire_days=$7
+cert_expire_days=$6
 
-openssl_cnf=$8
+openssl_cnf=$7
 
 if [ ! -d  $createCertDir ]; then
  mkdir -p $createCertDir
  fi
 
 
-if  [[ "1" != $openssl_cnf ]]; then
+if  [ "1" != "$openssl_cnf" ]; then
  # 设置 openssl 配置环境变量
  export  OPENSSL_CONF=$openssl_cnf
  echo "openssl.cnf=$OPENSSL_CONF"
  fi
 
-BASE_CA_PRI=$9
+BASE_CA_PRI=$8
 
 
 function openssl_create () {
@@ -63,7 +62,7 @@ function java_create() {
 
 
 
-case $2 in
+case $1 in
     "openssl_create" ) openssl_create;;
     "java_create" ) java_create;;
 esac

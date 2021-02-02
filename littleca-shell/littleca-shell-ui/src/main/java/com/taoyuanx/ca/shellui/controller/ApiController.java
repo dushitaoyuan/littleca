@@ -123,7 +123,7 @@ public class ApiController {
         }
         shellParam.setCertSubect(certReq.getSubject());
         String path = appConfig.getCertBaseDir() + serialNumber;
-        shellParam.setCreateCertDir(appConfig.getCertBaseDir() + serialNumber);
+        shellParam.setCreateCertDir(path);
         CommonUtil.forceBuildPath(path);
         shellParam.setOpensslConfPath(appConfig.getOpensslConfPath());
         shellParam.setOpensslCaPrivateKeyPath(appConfig.getOpensslCaPrivateKeyPath());

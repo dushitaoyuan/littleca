@@ -1,6 +1,7 @@
 package com.taoyuanx.ca.shellui.config;
 
 import com.taoyuanx.ca.shell.excutors.ShellExecutor;
+import com.taoyuanx.ca.shell.excutors.impl.LinuxShellExecutor;
 import com.taoyuanx.ca.shell.excutors.impl.WindowsShellExecutor;
 import com.taoyuanx.ca.shellui.util.SimpleTokenManager;
 import lombok.Data;
@@ -74,12 +75,12 @@ public class AppConfig {
 
     @Bean
     public ShellExecutor shellExecutor() {
-        return new WindowsShellExecutor();
+        if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+            return new WindowsShellExecutor();
+        } else {
+            return new LinuxShellExecutor();
+        }
     }
-
-
-
-
 
 
     public String getUsername() {
