@@ -30,15 +30,15 @@ https://hub.docker.com/repository/docker/dushitaoyuan/littleca
 ```shell script
 # 启动 littleca-ui
 docker pull dushitaoyuan/littleca
-docker run    -p 8080:8080  -v /home/mycerts:/home/mycerts -v /home/java/logs:/home/java/logs   -d littleca 
+docker run    -p 8080:8080  -v /home/mycerts:/home/mycerts -v /home/java/logs:/home/java/logs   -d dushitaoyuan/littleca 
 
 
 # 启动 littleca-shell-ui
 docker pull dushitaoyuan/littleca_shell
 # 基于keytool生成
-docker run -p 8081:8081 -e shellType=java -v /home/myca:/home/ca -v /home/mycerts:/home/mycerts -v /home/java/logs:/home/java/logs   -d littleca_shell
+docker run -p 8081:8081 -e shellType=java -v /home/myca:/home/ca -v /home/mycerts:/home/mycerts -v /home/java/logs:/home/java/logs   -d dushitaoyuan/littleca_shell
 #基于openssl
-docker run -p 8082:8081 -e shellType=openssl -v /home/myca1:/home/ca -v /home/mycerts1:/home/mycerts -v /home/java/logs1:/home/java/logs   -d littleca_shell
+docker run -p 8082:8081 -e shellType=openssl -v /home/myca1:/home/ca -v /home/mycerts1:/home/mycerts -v /home/java/logs1:/home/java/logs   -d dushitaoyuan/littleca_shell
 
 
 ```
