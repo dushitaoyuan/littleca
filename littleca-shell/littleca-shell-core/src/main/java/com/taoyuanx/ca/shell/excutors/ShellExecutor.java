@@ -3,7 +3,11 @@ package com.taoyuanx.ca.shell.excutors;
 
 import com.taoyuanx.ca.shell.params.ShellParam;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,7 +19,7 @@ import java.util.stream.Collectors;
 public interface ShellExecutor {
     public static final String EMPTY_ARG_FLAG = "1";
 
-    void execute(ShellParam shellParam) throws IOException;
+    void execute(ShellParam shellParam) throws Exception;
 
     default String buildShellArgs(ShellParam shellParam) {
         List<String> shellParams = shellParam.buildShellParams();
@@ -25,5 +29,16 @@ public interface ShellExecutor {
             }
             return str;
         }).collect(Collectors.joining(" "));
+    }
+
+    default String readProcessStream(InputStream inputStream) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-8")));
+        StringBuilder buf = new StringBuilder();
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            buf.append(line);
+        }
+        br.close();
+        return buf.toString();
     }
 }

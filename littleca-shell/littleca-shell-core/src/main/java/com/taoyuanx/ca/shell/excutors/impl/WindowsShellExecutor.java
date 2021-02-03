@@ -21,18 +21,18 @@ public class WindowsShellExecutor implements ShellExecutor {
     static Logger LOG = LoggerFactory.getLogger(WindowsShellExecutor.class);
 
     @Override
-    public void execute(ShellParam shellParam) throws IOException {
+    public void execute(ShellParam shellParam) throws Exception {
         String cmd = shellParam.getShellPath() + " " + buildShellArgs(shellParam);
         LOG.info("exe cmd:[{}]", cmd);
+        LOG.debug("exec cmd:[{}]", cmd);
         Process process = Runtime.getRuntime().exec(cmd);
-        BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream(), Charset.forName("UTF-8")));
-        StringBuilder buf = new StringBuilder();
-        String line = null;
-        while ((line = br.readLine()) != null) {
-            buf.append(line);
+        try {
+            int waitFor = process.waitFor();
+            String errorMsg = readProcessStream(process.getErrorStream());
+            String stdoutMsg = readProcessStream(process.getInputStream());
+            LOG.debug("exec result,stdoutMsg=>[{}],errorMsg=>[{}],waitFor=>{}", errorMsg,stdoutMsg,waitFor);
+        } finally {
+            process.destroy();
         }
-        LOG.info("exe info:{}", buf);
-        process.destroy();
-        br.close();
     }
 }

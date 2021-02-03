@@ -32,7 +32,7 @@ public class ShellTest {
     }
 
     @Test
-    public void execShell() throws IOException {
+    public void execShell() throws Exception {
 
         ShellExecutor shellExecutor = new LinuxShellExecutor();
         shellExecutor.execute(shellParam);

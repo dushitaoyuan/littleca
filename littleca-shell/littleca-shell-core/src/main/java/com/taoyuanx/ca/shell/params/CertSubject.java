@@ -47,8 +47,8 @@ public class CertSubject {
     /**
      * openssl subject="/C=%C%/ST=%ST%/L=%L%/O=%O%/OU=%OU%/CN=%CN%"
      */
-     private static String OPENSLL_SUBJECT_FORMAT = "\"/C=%s/ST=%s/L=%s/O=%s/OU=%s/CN=%s\"";
 
+    private static String OPENSSL_SUBJECT_FORMAT = "/C=%s/ST=%s/L=%s/O=%s/OU=%s/CN=%s";
 
     /**
      * java C=CN,ST=BJ,L=BJ,O=testclient,OU=testclient,CN=client
@@ -57,7 +57,7 @@ public class CertSubject {
 
 
     public String buildOpensslSubject() {
-        return String.format(OPENSLL_SUBJECT_FORMAT, C, ST, L, O, OU, CN);
+        return String.format(OPENSSL_SUBJECT_FORMAT, C, ST, L, O, OU, CN);
     }
 
 
