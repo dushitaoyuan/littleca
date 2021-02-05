@@ -2,20 +2,14 @@
 FROM dushitaoyuan/alpine-oracle-java8:jre
 # 设置时区
 ENV TZ='Asia/Shanghai'
-
-# java 部署目录
-RUN mkdir -p /home/java
-#openssl配置
-RUN mkdir -p /home/ca /home/myca /home/mycerts
-RUN  apk add openssl
-
-COPY ca/* /home/myca/
-
-
 ENV shellType="openssl"
+
+RUN mkdir -p /home/java \
+ /home/ca /home/myca /home/mycerts && apk add openssl
 
 VOLUME ["/home/ca","/home/mycerts","/home/java/logs"]
 
+COPY ca/* /home/myca/
 ADD littleca-shell-ui-1.0-SNAPSHOT.jar /home/java
 ADD jar.sh /home/java/
 RUN dos2unix /home/java/jar.sh

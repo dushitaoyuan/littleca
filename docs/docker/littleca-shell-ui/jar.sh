@@ -14,10 +14,10 @@ function start() {
 #初始化openssl 默认配置
 function initOpenssl() {
     count=`ls -A /home/ca|wc -w`
-    if [ $count > 0 ];then
+    if [ $count == 0 ];then
      echo "init openssl"
-     cd /home/ca
      cp -r /home/myca/* /home/ca
+     cd /home/ca
      mkdir -p private  newcerts certs crl crlnumber
      touch index.txt serial
      echo 01 >serial
